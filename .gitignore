@@ -2,6 +2,10 @@
 *.slo
 *.lo
 *.o
+*.exe
+
+# swap files
+*.swp
 
 # Compiled Dynamic libraries
 *.so
