@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
-// <copyright file="ColorBasics.h" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
+// <copyright file="ColorBasics.h" company="Portland State University">
+//     Copyright (c) Portland State University.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 

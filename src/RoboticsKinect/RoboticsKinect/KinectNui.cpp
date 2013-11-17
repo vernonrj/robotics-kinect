@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// <copyright file="KinectNui.cpp" company="PSU">
+// <copyright file="KinectNui.cpp" company="Portland State University">
 //     Copyright (c) Portland State University.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
