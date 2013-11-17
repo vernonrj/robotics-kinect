@@ -9,11 +9,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma platform(NXT)
+#include "bluetooth.h"
+//long nLastXmitTimeStamp = nPgmTime;
+//long nDeltaTime         = 0;
 
-long nLastXmitTimeStamp = nPgmTime;
-long nDeltaTime         = 0;
-
-const int kTimeBetweenXmit = 30;
+//const int kTimeBetweenXmit = 30;
+const int kMaxSizeOfMessage = 5;
+const TMailboxIDs kQueueID = mailbox1;
 
 void ErrorFatal(const string& errmsg)
 {
@@ -52,7 +54,7 @@ bool checkBTLinkConnected()
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int readMultipleDataMsgs(ubyte *nRcvBuffer, int maxSize)
+int readMessage(ubyte *nRcvBuffer, int maxSize)
 {
     TFileIOResult nBTCmdRdErrorStatus;
     int nSizeOfMessage;
@@ -100,7 +102,7 @@ task main()
         if (false == checkBTLinkConnected())
             ErrorFatal("Connect");
         //sendDataMsg();
-        int success = readMultipleDataMsgs(nRcvBuffer, kMaxSizeOfMessage);
+        int success = readMessage(nRcvBuffer, kMaxSizeOfMessage);
         if (success == 0)
         {
             string str;
