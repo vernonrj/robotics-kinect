@@ -10,17 +10,13 @@
 
 #pragma platform(NXT)
 #include "bluetooth.h"
-//long nLastXmitTimeStamp = nPgmTime;
-//long nDeltaTime         = 0;
 
-//const int kTimeBetweenXmit = 30;
+
 const int kMaxSizeOfMessage = 5;
 const TMailboxIDs kQueueID = mailbox1;
 
 void ErrorFatal(const string& errmsg)
 {
-    PlaySound(soundLowBuzz);
-    PlaySound(soundLowBuzz);
     eraseDisplay();
     nxtDisplayCenteredTextLine(3, "ERROR");
     nxtDisplayCenteredTextLine(4, errmsg);
@@ -28,12 +24,11 @@ void ErrorFatal(const string& errmsg)
     StopAllTasks();
 }
 
-void LogMsg(const string& errmsg)
+void LogMsg(const string& msg)
 {
-    PlaySound(soundLowBuzz);
     eraseDisplay();
     nxtDisplayCenteredTextLine(3, "LOG");
-    nxtDisplayCenteredTextLine(4, errmsg);
+    nxtDisplayCenteredTextLine(4, msg);
     wait1Msec(3000);
 }
 
@@ -101,7 +96,6 @@ task main()
     {
         if (false == checkBTLinkConnected())
             ErrorFatal("Connect");
-        //sendDataMsg();
         int success = readMessage(nRcvBuffer, kMaxSizeOfMessage);
         if (success == 0)
         {
