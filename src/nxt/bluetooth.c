@@ -1,54 +1,33 @@
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
-//                                    Bluetooth Receiving
+//                            Bluetooth Receiving
 //
 // Modified from ROBOTC NXT BT Messaging No Error Checking.c
 // Functions for receiving data over bluetooth
 //
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 #pragma platform(NXT)
 #include "bluetooth.h"
+#include "servo_config.h"
+#include "logging.h"
 
 
 const int kMaxSizeOfMessage = 5;
 const TMailboxIDs kQueueID = mailbox1;
 
-void ErrorFatal(const string& errmsg)
-{
-    eraseDisplay();
-    nxtDisplayCenteredTextLine(3, "ERROR");
-    nxtDisplayCenteredTextLine(4, errmsg);
-    wait1Msec(3000);
-    StopAllTasks();
-}
 
-void LogMsg(const string& msg)
-{
-    eraseDisplay();
-    nxtDisplayCenteredTextLine(3, "LOG");
-    nxtDisplayCenteredTextLine(4, msg);
-    wait1Msec(1000);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//                           Check to See if Bluetooth Link is Connection
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/**
+ * @brief returns True if bluetooth is connected
+ */
 bool checkBTLinkConnected()
 {
     return nBTCurrentStreamIndex >= 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//                                        Receive Messages Task
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// store a received message. see header for details
 int readMessage(ubyte *nRcvBuffer, int maxSize)
 {
     TFileIOResult nBTCmdRdErrorStatus;
@@ -77,12 +56,9 @@ int readMessage(ubyte *nRcvBuffer, int maxSize)
     return -1;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//                                        Main Task
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/**
+ * @brief main task
+ */
 task main()
 {
     ubyte nRcvBuffer[kMaxSizeOfMessage];
@@ -108,3 +84,20 @@ task main()
 
     return;
 }
+
+// if (message == 'f'){
+//   motor[motorD] = 50;
+//   motor[motorE] = 50;
+// }
+// else if (message == 'b'){
+//   motor[motorD] = -50;
+//   motor[motorE] = -50;
+// }
+// else if (message == 'l'){
+//   motor[motorD] = 0;
+//   motor[motorE] = 50;
+// }
+// else if (message == 'r'){
+//   motor[motorD] = 50;
+//   motor[motorE] = 0;
+
