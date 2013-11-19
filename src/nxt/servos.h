@@ -10,7 +10,6 @@
  */
 typedef struct motorctrl_t
 {
-    str m_message;
     int m_motor_d;
     int m_motor_e;
 } motorctrl_t;
@@ -23,29 +22,29 @@ typedef struct motorctrl_t
  */
 motorctrl_t motorctrl_create(const string& str)
 {
+    const ubyte motor_spec = str[0];
     motorctrl_t m =
     {
-        .m_message = str[0],
         .m_motor_d = 0,
         .m_motor_e = 0,
     };
 
-    if ('f' == m.m_message)
+    if ('f' == motor_spec)
     {
         m.motor_d += 50;
         m.motor_e += 50;
     }
-    if ('b' == m.m_message)
+    if ('b' == motor_spec)
     {
         m.motor_d += -50;
         m.motor_e += -50;
     }
-    if ('l' == m.m_message)
+    if ('l' == motor_spec)
     {
         m.motor_d += 0;
         m.motor_e += 50;
     }
-    if ('r' == m.m_message)
+    if ('r' == motor_spec)
     {
         m.motor_d += 50;
         m.motor_e += 0;
