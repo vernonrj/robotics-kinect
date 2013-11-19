@@ -16,10 +16,8 @@ task main()
     bNxtLCDStatusDisplay = true;
     wait1Msec(2000); // Give time to start the program at the far end as well
 
-    //
-    // Send and receive 1M messages
-    //
-    for (long nSendTotal = 0; nSendTotal < 1000000; ++nSendTotal)
+    // run forever or until a break signal is sent
+    while (true)
     {
         if (false == checkBTLinkConnected())
             ErrorFatal("Connect");
@@ -29,7 +27,13 @@ task main()
             string str;
             StringFromChars(str, (char*)nRcvBuffer);
             //LogMsg(str);
-            processAction(str);
+            int action_success = processAction(str);
+            if (action_success > 0)
+                break;
+            else if (action_success < 0)
+            {
+                log("bad str: %s", str);
+            }
         }
         wait1Msec(1);
     }
@@ -44,7 +48,7 @@ task main()
  */
 int processAction(const string& str)
 {
-    UBYTE message = str[0];
+    ubyte message = str[0];
     
     if (message == 'f')
     {
