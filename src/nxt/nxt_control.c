@@ -5,6 +5,10 @@
 #include "logging.h"
 #include "bluetooth.h"
 #include "servo_config.h"
+#include "servos.h"
+
+
+static int processAction(const string& str);
 
 
 /**
@@ -41,6 +45,8 @@ task main()
     return;
 }
 
+
+
 /**
  * @brief process an action contained in str and run action
  * @returns
@@ -48,24 +54,24 @@ task main()
  */
 int processAction(const string& str)
 {
-    ubyte message = str[0];
+    motorctrl_t message = get_motorctl(str);
     
-    if (message == 'f')
+    if (is_forward(message))
     {
       motor[motorD] = 50;
       motor[motorE] = 50;
     }
-    else if (message == 'b')
+    else if (is_backward(message))
     {
       motor[motorD] = -50;
       motor[motorE] = -50;
     }
-    else if (message == 'l')
+    else if (is_left(message))
     {
       motor[motorD] = 0;
       motor[motorE] = 50;
     }
-    else if (message == 'r')
+    else if (is_right(message))
     {
       motor[motorD] = 50;
       motor[motorE] = 0;
