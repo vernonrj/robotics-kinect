@@ -28,14 +28,13 @@ task main()
         int success = readMessage(nRcvBuffer, kMaxSizeOfMessage);
         if (success == 0)
         {
-            string str;
-            StringFromChars(str, (char*)nRcvBuffer);
-            //LogMsg(str);
-            int action_success = processAction(str);
+            int action_success = processAction(nRcvBuffer);
             if (action_success > 0)
                 break;
             else if (action_success < 0)
             {
+                string str;
+                StringFromChars(str, (char*)nRcvBuffer);
                 log("bad str: %s", str);
             }
         }
@@ -48,11 +47,15 @@ task main()
 
 
 /**
- * @brief process an action contained in str and run action
+ * @brief process an action contained in str and run action.
+ *
+ * Currently, takes a message received over bluetooth and
+ * parses characters received. Can receive multiple characters,
+ * so for instance, receiving an 'ff' will say "forward *2".
  * @returns
  * On success, returns 0. On error, returns -1.
  */
-int processAction(const string& str)
+int processAction(ubyte *str)
 {
     motorctrl_t mctrl = motorctrl_create(str);
     int motor_d = motorctrl_motor_d(mctrl);
