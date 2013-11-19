@@ -6,6 +6,49 @@
 #define __SERVOS_H__
 
 /**
+ * @brief defines which system is being used currently
+ */
+typedef enum arm_motor_e
+{
+    CTRL_MOTOR,     //!< control the motor
+    CTRL_ARM,       //!< control the arm
+} arm_motor_e;
+
+
+/**
+ * @brief what system is currently being controlled.
+ * @note internal to this file. Use associated functions
+ * to change this instead
+ */
+static arm_motor_e CURR_SYSTEM = CTRL_MOTOR;
+
+
+/**
+ * @brief control the motor
+ */
+void ctrl_use_motor(void)
+{
+    CURR_SYSTEM = CTRL_MOTOR;
+}
+
+
+/**
+ * @brief control the arm
+ */
+void ctrl_use_arm(void)
+{
+    CURR_SYSTEM = CTRL_ARM;
+}
+
+/**
+ * @brief return which system is currently being used
+ */
+arm_motor_e ctrl_using_which(void)
+{
+    return CURR_SYSTEM;
+}
+
+/**
  * @brief control structure used in boolean functions
  */
 typedef struct motorctrl_t
@@ -30,31 +73,57 @@ motorctrl_t motorctrl_create(ubyte *str)
     while (*str != '\0')
     {
         const ubyte motor_spec = *str;
-        if ('f' == motor_spec)
+        if (ctrl_using_which() == CTRL_MOTOR)
         {
-            m.motor_d += 50;
-            m.motor_e += 50;
+            // motor commands
+            if ('f' == motor_spec)
+            {
+                motorctrl_forward(&m.motor_d);
+                motorctrl_forward(&m.motor_e);
+            }
+            else if ('b' == motor_spec)
+            {
+                motorctrl_backward(&m.motor_d);
+                motorctrl_backward(&m.motor_e);
+            }
+            else if ('l' == motor_spec)
+            {
+                //m.motor_d += 0;
+                motorctrl_forward(&m.motor_e);
+            }
+            else if ('r' == motor_spec)
+            {
+                motorctrl_forward(&m.motor_d);
+                //m.motor_e += 0;
+            }
         }
-        else if ('b' == motor_spec)
+        else if (ctrl_using_which() == CTRL_ARM)
         {
-            m.motor_d += -50;
-            m.motor_e += -50;
-        }
-        else if ('l' == motor_spec)
-        {
-            m.motor_d += 0;
-            m.motor_e += 50;
-        }
-        else if ('r' == motor_spec)
-        {
-            m.motor_d += 50;
-            m.motor_e += 0;
+            // arm commands
         }
         str++;
     }
     m.motor_d = motorctrl_bound_value(m.motor_d);
     m.motor_e = motorctrl_bound_value(m.motor_e);
     return m;
+}
+
+/**
+ * @brief increment motor value. Doesn't apply bounding.
+ * @param currval current motor value
+ */
+inline void motorctrl_forward(int *currval)
+{
+    *currval += 50;
+}
+
+/**
+ * @brief decrement motor value. Doesn't apply bounding.
+ * @param currval current motor value
+ */
+inline void motorctrl_backward(int *currval)
+{
+    *currval -= 50;
 }
 
 /**
