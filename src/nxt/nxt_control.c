@@ -2,6 +2,8 @@
  * @file
  * @brief nxt entry point
  */
+#include "logging.h"
+#include "bluetooth.h"
 #include "servo_config.h"
 
 
