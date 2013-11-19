@@ -54,32 +54,13 @@ task main()
  */
 int processAction(const string& str)
 {
-    motorctrl_t message = get_motorctl(str);
-    
-    if (is_forward(message))
-    {
-      motor[motorD] = 50;
-      motor[motorE] = 50;
-    }
-    else if (is_backward(message))
-    {
-      motor[motorD] = -50;
-      motor[motorE] = -50;
-    }
-    else if (is_left(message))
-    {
-      motor[motorD] = 0;
-      motor[motorE] = 50;
-    }
-    else if (is_right(message))
-    {
-      motor[motorD] = 50;
-      motor[motorE] = 0;
-    }
-    else
-    {
-        return -1;
-    }
+    motorctrl_t mctrl = motorctrl_create(str);
+    int motor_d = motorctrl_motor_d(mctrl);
+    int motor_e = motorctrl_motor_e(mctrl);
+
+    if (motor_d) motor[motorD] = motor_d;
+    if (motor_e) motor[motorE] = motor_e;
+
     return 0;
 }
 
