@@ -26,7 +26,8 @@ task main()
         {
             string str;
             StringFromChars(str, (char*)nRcvBuffer);
-            LogMsg(str);
+            //LogMsg(str);
+            processAction(str);
         }
         wait1Msec(1);
     }
@@ -34,20 +35,41 @@ task main()
     return;
 }
 
-// if (message == 'f'){
-//   motor[motorD] = 50;
-//   motor[motorE] = 50;
-// }
-// else if (message == 'b'){
-//   motor[motorD] = -50;
-//   motor[motorE] = -50;
-// }
-// else if (message == 'l'){
-//   motor[motorD] = 0;
-//   motor[motorE] = 50;
-// }
-// else if (message == 'r'){
-//   motor[motorD] = 50;
-//   motor[motorE] = 0;
+/**
+ * @brief process an action contained in str and run action
+ * @returns
+ * On success, returns 0. On error, returns -1.
+ */
+int processAction(const string& str)
+{
+    UBYTE message = str[0];
+    
+    if (message == 'f')
+    {
+      motor[motorD] = 50;
+      motor[motorE] = 50;
+    }
+    else if (message == 'b')
+    {
+      motor[motorD] = -50;
+      motor[motorE] = -50;
+    }
+    else if (message == 'l')
+    {
+      motor[motorD] = 0;
+      motor[motorE] = 50;
+    }
+    else if (message == 'r')
+    {
+      motor[motorD] = 50;
+      motor[motorE] = 0;
+    }
+    else
+    {
+        return -1;
+    }
+    return 0;
+}
+
 
 
