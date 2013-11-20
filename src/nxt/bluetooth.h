@@ -1,17 +1,23 @@
 /**
  * @file
  * @brief bluetooth processing for Robotics NXT
- * @FIXME move main() out of this header
+ * @note only tested on NXT devices
  */
 #ifndef __NXT_BLUETOOTH_H__
 #define __NXT_BLUETOOTH_H__
 
 #pragma platform(NXT)
+
 #include "logging.h"
 
 
-const int kMaxSizeOfMessage = 5;
-const TMailboxIDs kQueueID = mailbox1;
+
+/**
+ * @brief mailbox that message will be sent to
+ * @TODO
+ * this might need to be changed to work in a setup other than NXT <--> NXT
+ */
+const TMailboxIDs DefaultQueue = mailbox1;
 
 
 /**
@@ -39,11 +45,17 @@ int readMessage(ubyte *nRcvBuffer, int maxSize)
     TFileIOResult nBTCmdRdErrorStatus;
     int nSizeOfMessage;
 
+    if (!checkBTLinkConnected())
+    {
+        // bluetooth not connected. Return now as error
+        return -1;
+    }
+
     while (true)
     {
         // Check to see if a message is available
 
-        nSizeOfMessage = cCmdMessageGetSize(kQueueID);
+        nSizeOfMessage = cCmdMessageGetSize(DefaultQueue);
         if (nSizeOfMessage <= 0)
         {
             wait1Msec(1);    // Give other tasks a chance to run
@@ -52,14 +64,16 @@ int readMessage(ubyte *nRcvBuffer, int maxSize)
 
         if (nSizeOfMessage > maxSize)
             nSizeOfMessage = maxSize;
-        nBTCmdRdErrorStatus = cCmdMessageRead(nRcvBuffer, nSizeOfMessage, kQueueID);
+        nBTCmdRdErrorStatus = cCmdMessageRead(nRcvBuffer,
+                                              nSizeOfMessage,
+                                              DefaultQueue);
         switch (nBTCmdRdErrorStatus)
         {
             case ioRsltSuccess: return 0; break;
             default: return 1; break;
         }
     }
-    return -1;
+    return 0;
 }
 
 
