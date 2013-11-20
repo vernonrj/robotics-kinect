@@ -4,6 +4,9 @@
  */
 #ifndef __LOGGING_H__
 #define __LOGGING_H__
+#pragma platform(NXT)
+
+
 /**
  * @brief logs a fatal error and terminates function
  */
