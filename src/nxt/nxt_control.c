@@ -2,13 +2,22 @@
  * @file
  * @brief nxt entry point
  */
+#pragma platform(NXT)
+
 #include "logging.h"
 #include "bluetooth.h"
 #include "servo_config.h"
 #include "servos.h"
 
+/**
+ * @brief max size of message that can be received over bluetooth
+ * @FIXME: is this a hardware limitation?
+ */
+#define BT_MAX_MSG_SIZE 5
+
 
 static int processAction(const string& str);
+
 
 
 /**
@@ -16,7 +25,7 @@ static int processAction(const string& str);
  */
 task main()
 {
-    ubyte nRcvBuffer[kMaxSizeOfMessage];
+    ubyte nRcvBuffer[BT_MAX_MSG_SIZE];
     bNxtLCDStatusDisplay = true;
     wait1Msec(2000); // Give time to start the program at the far end as well
 
@@ -25,7 +34,7 @@ task main()
     {
         if (false == checkBTLinkConnected())
             ErrorFatal("Connect");
-        int success = readMessage(nRcvBuffer, kMaxSizeOfMessage);
+        int success = readMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
         if (success == 0)
         {
             int action_success = processAction(nRcvBuffer);
