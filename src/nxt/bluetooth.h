@@ -23,7 +23,7 @@ const TMailboxIDs DefaultQueue = mailbox1;
 /**
  * @brief returns True if bluetooth is connected
  */
-bool checkBTLinkConnected()
+inline bool checkBTLinkConnected()
 {
     return nBTCurrentStreamIndex >= 0;
 }
@@ -31,19 +31,19 @@ bool checkBTLinkConnected()
 
 /**
  * @brief returns a message received over Bluetooth
- * @param nRcvBuffer
- * buffer to store message in
+ *
+ * @param data_out buffer to store message in
+ *
  * @param maxSize
- * number of characters, including null terminator, that nRcvBuffer can hold
+ * number of characters, including null terminator, that data_out can hold
+ *
  * @returns
- * On success, returns 0.
- * On error, returns -1.
+ * On success, returns 0. On error, returns -1. 
  * On unknown, returns a positive number
  */
-int readMessage(ubyte *nRcvBuffer, int maxSize)
+int readMessage(ubyte *data_out, int maxSize)
 {
-    TFileIOResult nBTCmdRdErrorStatus;
-    int nSizeOfMessage;
+    int msg_size;
 
     if (!checkBTLinkConnected())
     {
@@ -55,19 +55,21 @@ int readMessage(ubyte *nRcvBuffer, int maxSize)
     {
         // Check to see if a message is available
 
-        nSizeOfMessage = cCmdMessageGetSize(DefaultQueue);
-        if (nSizeOfMessage <= 0)
+        msg_size = cCmdMessageGetSize(DefaultQueue);
+        if (msg_size <= 0)
         {
             wait1Msec(1);    // Give other tasks a chance to run
-            break;           // No more message this time
+            continue;        // No more message this time
         }
 
-        if (nSizeOfMessage > maxSize)
-            nSizeOfMessage = maxSize;
-        nBTCmdRdErrorStatus = cCmdMessageRead(nRcvBuffer,
-                                              nSizeOfMessage,
-                                              DefaultQueue);
-        switch (nBTCmdRdErrorStatus)
+        if (msg_size > maxSize)
+        {
+            // truncate message
+            msg_size = maxSize;
+        }
+        TFileIOResult read_success;
+        read_success = cCmdMessageRead(data_out, msg_size, DefaultQueue);
+        switch (read_success)
         {
             case ioRsltSuccess: return 0; break;
             default: return 1; break;
