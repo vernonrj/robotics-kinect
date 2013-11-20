@@ -29,26 +29,28 @@ task main()
     bNxtLCDStatusDisplay = true;
     wait1Msec(2000); // Give time to start the program at the far end as well
 
-    // run forever or until a break signal is sent
-    while (true)
-    {
+    // run until a break signal is sent (set in process_result)
+    int process_result;
+    do {
         if (false == checkBTLinkConnected())
             ErrorFatal("Connect");
-        int success = readMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
-        if (success == 0)
+        // wait until a message is available over bluetooth, then return it
+        process_result = readMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
+        if (process_result < 0)
         {
-            int action_success = processAction(nRcvBuffer);
-            if (action_success > 0)
-                break;
-            else if (action_success < 0)
-            {
-                string str;
-                StringFromChars(str, (char*)nRcvBuffer);
-                log("bad str: %s", str);
-            }
+            log("bt failure");
+            break;
+        }
+        // process message read from bluetooth
+        process_result = processAction(nRcvBuffer);
+        if (process_result < 0)
+        {
+            string str;
+            StringFromChars(str, (char*)nRcvBuffer);
+            log("bad str: %s", str);
         }
         wait1Msec(1);
-    }
+    } while (process_result == 0);
 
     return;
 }
