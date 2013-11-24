@@ -70,7 +70,10 @@ int motorctrl_motor_e(const motorctrl_t& m);
  */
 void motorctrl_create(ubyte *str, motorctrl_t *m_ptr)
 {
-    motorctrl_t m = {0, 0};
+    motorctrl_t m;
+    m.motor_d = 0;
+    m.motor_e = 0;
+
     while (*str != '\0')
     {
         const ubyte motor_spec = *str;
