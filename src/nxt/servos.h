@@ -127,9 +127,8 @@ void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
         }
         str++;
     }
-    m.motor_left = motorctrl_bound_value(m.motor_left);
-    m.motor_right = motorctrl_bound_value(m.motor_right);
-    *m_ptr = m;
+    m_ptr->motor_left = motorctrl_bound_value(m.motor_left);
+    m_ptr->motor_right = motorctrl_bound_value(m.motor_right);
 }
 
 /**

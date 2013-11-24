@@ -51,7 +51,7 @@ task main()
         process_result = readMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
         if (process_result < 0)
         {
-            LogMsg("bt failure");
+            LogMsg("bt failure", true);
             break;
         }
         // uncomment to send message back to confirm received
@@ -65,7 +65,6 @@ task main()
             StringFromChars(str, (char*)nRcvBuffer);
             LogMsg("bad str");
         }
-        wait1Msec(1);
     } while (process_result == 0);
 
     return;
