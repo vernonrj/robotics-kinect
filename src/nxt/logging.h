@@ -23,12 +23,13 @@ void ErrorFatal(const string& errmsg)
 /**
  * @brief logs a message stored in msg
  */
-void LogMsg(const string& msg)
+void LogMsg(const string& msg, bool do_wait=false)
 {
     eraseDisplay();
     nxtDisplayCenteredTextLine(3, "LOG");
     nxtDisplayCenteredTextLine(4, msg);
-    wait1Msec(1000);
+    if (do_wait)
+        wait1Msec(1000);
 }
 
 

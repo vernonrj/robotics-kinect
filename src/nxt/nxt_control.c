@@ -20,14 +20,13 @@
 
 #include "logging.h"
 #include "bluetooth.h"
-//#include "servo_config.h"
 #include "servos.h"
 
 /**
  * @brief max size of message that can be received over bluetooth
- * @FIXME: is this a hardware limitation?
+ * @note should be a power of 2
  */
-#define BT_MAX_MSG_SIZE 5
+#define BT_MAX_MSG_SIZE 8
 
 
 static int processAction(ubyte *str);
@@ -55,8 +54,9 @@ task main()
             LogMsg("bt failure");
             break;
         }
-        // send message back to confirm received
-        writeMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
+        // uncomment to send message back to confirm received
+        // TODO: this didn't seem to work when it was uncommented
+        //writeMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
         // process message read from bluetooth
         process_result = processAction(nRcvBuffer);
         if (process_result < 0)
@@ -86,11 +86,14 @@ static int processAction(ubyte *str)
 {
     motorctrl_t mctrl;
     motorctrl_update(&mctrl, str);
-    int motor_d = motorctrl_motor_d(mctrl);
-    int motor_e = motorctrl_motor_e(mctrl);
+    int motor_left = motorctrl_motor_left(mctrl);
+    int motor_right = motorctrl_motor_right(mctrl);
 
-    if (motor_d) motor[motorD] = motor_d;
-    if (motor_e) motor[motorE] = motor_e;
+    motor[motorD] = motor_left;
+    motor[motorE] = motor_right;
+    string log_str;
+    sprintf(log_str, "%i | %i", motor_left, motor_right);
+    LogMsg(log_str);
 
     return 0;
 }
