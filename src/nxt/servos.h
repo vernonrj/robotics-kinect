@@ -57,19 +57,20 @@ typedef struct motorctrl_t
     int motor_e;
 } motorctrl_t;
 
+void motorctrl_forward(int *currval);
+void motorctrl_backward(int *currval);
+int motorctrl_bound_value(int motor_val);
+int motorctrl_motor_d(const motorctrl_t& m);
+int motorctrl_motor_e(const motorctrl_t& m);
 
 /**
  * @brief return a motorctrl_t structure with motor magnitude specs
  * @param str char array returned from a bluetooth read
  * @returns Returns a structure for setting motor values
  */
-motorctrl_t motorctrl_create(ubyte *str)
+void motorctrl_create(ubyte *str, motorctrl_t *m_ptr)
 {
-    motorctrl_t m =
-    {
-        .motor_d = 0,
-        .motor_e = 0,
-    };
+    motorctrl_t m = {0, 0};
     while (*str != '\0')
     {
         const ubyte motor_spec = *str;
@@ -105,14 +106,14 @@ motorctrl_t motorctrl_create(ubyte *str)
     }
     m.motor_d = motorctrl_bound_value(m.motor_d);
     m.motor_e = motorctrl_bound_value(m.motor_e);
-    return m;
+    *m_ptr = m;
 }
 
 /**
  * @brief increment motor value. Doesn't apply bounding.
  * @param currval current motor value
  */
-inline void motorctrl_forward(int *currval)
+void motorctrl_forward(int *currval)
 {
     *currval += 50;
 }
@@ -121,7 +122,7 @@ inline void motorctrl_forward(int *currval)
  * @brief decrement motor value. Doesn't apply bounding.
  * @param currval current motor value
  */
-inline void motorctrl_backward(int *currval)
+void motorctrl_backward(int *currval)
 {
     *currval -= 50;
 }

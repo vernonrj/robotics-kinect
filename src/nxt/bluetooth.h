@@ -23,7 +23,7 @@ const TMailboxIDs DefaultQueue = mailbox1;
 /**
  * @brief returns True if bluetooth is connected
  */
-inline bool checkBTLinkConnected()
+bool checkBTLinkConnected()
 {
     return nBTCurrentStreamIndex >= 0;
 }
