@@ -63,12 +63,14 @@ int motorctrl_bound_value(int motor_val);
 int motorctrl_motor_d(const motorctrl_t& m);
 int motorctrl_motor_e(const motorctrl_t& m);
 
+
+
 /**
- * @brief return a motorctrl_t structure with motor magnitude specs
+ * @brief updates a motorctrl_t structure with new motor magnitude specs
  * @param str char array returned from a bluetooth read
  * @returns Returns a structure for setting motor values
  */
-void motorctrl_create(ubyte *str, motorctrl_t *m_ptr)
+void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
 {
     motorctrl_t m;
     m.motor_d = 0;

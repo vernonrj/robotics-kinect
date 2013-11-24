@@ -55,6 +55,8 @@ task main()
             LogMsg("bt failure");
             break;
         }
+        // send message back to confirm received
+        writeMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
         // process message read from bluetooth
         process_result = processAction(nRcvBuffer);
         if (process_result < 0)
@@ -83,7 +85,7 @@ task main()
 static int processAction(ubyte *str)
 {
     motorctrl_t mctrl;
-    motorctrl_create(str, &mctrl);
+    motorctrl_update(&mctrl, str);
     int motor_d = motorctrl_motor_d(mctrl);
     int motor_e = motorctrl_motor_e(mctrl);
 

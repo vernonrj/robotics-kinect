@@ -79,5 +79,15 @@ int readMessage(ubyte *data_out, int maxSize)
 }
 
 
+void writeMessage(ubyte *data_out, int maxSize)
+{
+    if (!checkBTLinkConnected())
+    {
+        return;
+    }
+
+    cCmdMessageWriteToBluetooth(DefaultQueue, data_out, maxSize);
+}
+
 
 #endif
