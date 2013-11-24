@@ -79,14 +79,21 @@ int readMessage(ubyte *data_out, int maxSize)
 }
 
 
-void writeMessage(ubyte *data_out, int maxSize)
+/**
+ * @brief writes a message out over Bluetooth
+ *
+ * @param data_out buffer message is stored in
+ *
+ * @param msg_size size of buffer message
+ */
+void writeMessage(ubyte *data_out, int msg_size)
 {
     if (!checkBTLinkConnected())
     {
         return;
     }
 
-    cCmdMessageWriteToBluetooth(DefaultQueue, data_out, maxSize);
+    cCmdMessageWriteToBluetooth(DefaultQueue, data_out, msg_size);
 }
 
 

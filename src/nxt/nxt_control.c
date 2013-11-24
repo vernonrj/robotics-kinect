@@ -55,8 +55,9 @@ task main()
             LogMsg("bt failure");
             break;
         }
-        // send message back to confirm received
-        writeMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
+        // uncomment to send message back to confirm received
+        // TODO: this didn't seem to work when it was uncommented
+        //writeMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
         // process message read from bluetooth
         process_result = processAction(nRcvBuffer);
         if (process_result < 0)
