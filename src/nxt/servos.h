@@ -6,6 +6,24 @@
 #define __SERVOS_H__
 
 /**
+ * @brief defines the largest value a motor can have
+ *
+ * This is the maximum value that a motor can get,
+ * i.e. forward*(max resolution).
+ */
+#define MOTORCTRL_MAX_MAGNITUDE 1024
+
+
+/**
+ * @brief defines the max number of chars to use for fuzzy logic
+ *
+ *
+ */
+#define MOTORCTRL_MAX_RESOLUTION 8
+
+
+
+/**
  * @brief defines which system is being used currently
  */
 typedef enum arm_motor_e
@@ -53,15 +71,15 @@ arm_motor_e ctrl_using_which(void)
  */
 typedef struct motorctrl_t
 {
-    int motor_d;
-    int motor_e;
+    int motor_left;
+    int motor_right;
 } motorctrl_t;
 
 void motorctrl_forward(int *currval);
 void motorctrl_backward(int *currval);
 int motorctrl_bound_value(int motor_val);
-int motorctrl_motor_d(const motorctrl_t& m);
-int motorctrl_motor_e(const motorctrl_t& m);
+int motorctrl_motor_left(const motorctrl_t& m);
+int motorctrl_motor_right(const motorctrl_t& m);
 
 
 
@@ -73,8 +91,8 @@ int motorctrl_motor_e(const motorctrl_t& m);
 void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
 {
     motorctrl_t m;
-    m.motor_d = 0;
-    m.motor_e = 0;
+    m.motor_left = 0;
+    m.motor_right = 0;
 
     while (*str != '\0')
     {
@@ -84,23 +102,23 @@ void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
             // motor commands
             if ('f' == motor_spec)
             {
-                motorctrl_forward(&m.motor_d);
-                motorctrl_forward(&m.motor_e);
+                motorctrl_forward(&m.motor_left);
+                motorctrl_forward(&m.motor_right);
             }
             else if ('b' == motor_spec)
             {
-                motorctrl_backward(&m.motor_d);
-                motorctrl_backward(&m.motor_e);
+                motorctrl_backward(&m.motor_left);
+                motorctrl_backward(&m.motor_right);
             }
             else if ('l' == motor_spec)
             {
-                //m.motor_d += 0;
-                motorctrl_forward(&m.motor_e);
+                //m.motor_left += 0;
+                motorctrl_forward(&m.motor_right);
             }
             else if ('r' == motor_spec)
             {
-                motorctrl_forward(&m.motor_d);
-                //m.motor_e += 0;
+                motorctrl_forward(&m.motor_left);
+                //m.motor_right += 0;
             }
         }
         else if (ctrl_using_which() == CTRL_ARM)
@@ -109,8 +127,8 @@ void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
         }
         str++;
     }
-    m.motor_d = motorctrl_bound_value(m.motor_d);
-    m.motor_e = motorctrl_bound_value(m.motor_e);
+    m.motor_left = motorctrl_bound_value(m.motor_left);
+    m.motor_right = motorctrl_bound_value(m.motor_right);
     *m_ptr = m;
 }
 
@@ -148,17 +166,17 @@ int motorctrl_bound_value(int motor_val)
 /**
  * @brief return the motor value for motorD
  */
-int motorctrl_motor_d(const motorctrl_t& m)
+int motorctrl_motor_left(const motorctrl_t& m)
 {
-    return m.motor_d;
+    return m.motor_left;
 }
 
 /**
  * @brief return the motor value for motorE
  */
-int motorctrl_motor_e(const motorctrl_t& m)
+int motorctrl_motor_right(const motorctrl_t& m)
 {
-    return m.motor_e;
+    return m.motor_right;
 }
 
 #endif
