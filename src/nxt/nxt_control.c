@@ -48,9 +48,8 @@ task main()
     do {
         if (false == checkBTLinkConnected())
         {
-            LogMsg("Disconnected");
-            wait1Msec(1000);
-            continue;
+            ErrorFatal("Disconnected");
+            return;
         }
         // wait until a message is available over bluetooth, then return it
         process_result = readMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
