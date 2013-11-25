@@ -56,8 +56,7 @@ int readMessage(ubyte *data_out, int maxSize)
         msg_size = cCmdMessageGetSize(DefaultQueue);
         if (msg_size <= 0)
         {
-            wait1Msec(1);    // Give other tasks a chance to run
-            continue;        // No more message this time
+            return 1;        // No message this time
         }
 
         if (msg_size > maxSize)
@@ -70,7 +69,7 @@ int readMessage(ubyte *data_out, int maxSize)
         switch (read_success)
         {
             case ioRsltSuccess: return 0; break;
-            default: return 1; break;
+            default: return 0; break;
         }
     }
     return 0;
