@@ -59,6 +59,20 @@ task main()
             wait1Msec(1000);
             continue;
         }
+        else if (process_result > 0)
+        {
+            if (time1[T1] < 100)
+            {
+                // zero out if running for more than 10 msecs without
+                // an update
+                processAction(NULL);
+            }
+            else
+            {
+                wait1Msec(1);
+            }
+            continue;
+        }
         // uncomment to send message back to confirm received
         // TODO: this didn't seem to work when it was uncommented
         //writeMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
@@ -99,6 +113,7 @@ static int processAction(ubyte *str)
     LogMsg(log_str);
     motor[motorD] = motor_left;
     motor[motorE] = motor_right;
+    ClearTimer(T1);
 
     return 0;
 }
