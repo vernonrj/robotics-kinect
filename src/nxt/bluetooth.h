@@ -36,7 +36,7 @@ bool checkBTLinkConnected()
  * number of characters, including null terminator, that data_out can hold
  *
  * @returns
- * On success, returns 0. On error, returns -1. 
+ * On success, returns 0. On error, returns -1.
  * On unknown, returns a positive number
  */
 int readMessage(ubyte *data_out, int maxSize)
