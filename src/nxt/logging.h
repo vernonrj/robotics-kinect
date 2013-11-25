@@ -15,6 +15,8 @@ void ErrorFatal(const string& errmsg)
     eraseDisplay();
     nxtDisplayCenteredTextLine(3, "ERROR");
     nxtDisplayCenteredTextLine(4, errmsg);
+    PlaySound(soundLowBuzz);
+    PlaySound(soundLowBuzz);
     wait1Msec(3000);
     StopAllTasks();
 }
