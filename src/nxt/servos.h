@@ -115,6 +115,13 @@ void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
     m.motor_left = 0;
     m.motor_right = 0;
 
+    if (NULL == str)
+    {
+        m_ptr->motor_left = 0;
+        m_ptr->motor_right = 0;
+        return;
+    }
+
     while (*str != '\0')
     {
         const ubyte motor_spec = *str;
@@ -149,6 +156,8 @@ void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
         else if (ctrl_using_which() == CTRL_ARM)
         {
             // arm commands
+            // TODO: implement. For now, get out of this state
+            ctrl_use_motor();   // FIXME: take this line out when arm is impl
         }
         str++;
     }
