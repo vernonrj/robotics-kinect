@@ -14,8 +14,6 @@
 
 /**
  * @brief mailbox that message will be sent to
- * @TODO
- * this might need to be changed to work in a setup other than NXT <--> NXT
  */
 const TMailboxIDs DefaultQueue = mailbox1;
 

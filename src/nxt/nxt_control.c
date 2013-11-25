@@ -24,9 +24,8 @@
 
 /**
  * @brief max size of message that can be received over bluetooth
- * @note should be a power of 2
  */
-#define BT_MAX_MSG_SIZE 8
+#define BT_MAX_MSG_SIZE MOTORCTRL_MAX_RES
 
 
 static int processAction(ubyte *str);

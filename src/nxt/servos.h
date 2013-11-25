@@ -6,20 +6,41 @@
 #define __SERVOS_H__
 
 /**
+ * @brief choose whether to use fuzzy logic or use hardset values
+ */
+#define MOTORCTRL_FUZZY
+
+/**
  * @brief defines the largest value a motor can have
  *
  * This is the maximum value that a motor can get,
- * i.e. forward*(max resolution).
+ * i.e. forward*resolution.
  */
-#define MOTORCTRL_MAX_MAGNITUDE 1024
+#define MOTORCTRL_MAX_SUM 1024
+
+/**
+ * @brief the max percentage that the motor will be set to
+ */
+#define MOTORCTRL_PERC_MAX 100
 
 
 /**
  * @brief defines the max number of chars to use for fuzzy logic
- *
- *
  */
-#define MOTORCTRL_MAX_RESOLUTION 8
+#define MOTORCTRL_MAX_RES 8
+
+
+/**
+ * @brief how much weight is given to a single increment
+ * (call to forward or backward)
+ */
+#define MOTORCTRL_FULL_STEP (MOTORCTRL_MAX_SUM / MOTORCTRL_MAX_RES)
+
+
+/**
+ * @brief how much weight is given for a half-increment
+ */
+#define MOTORCTRL_HALF_STEP (MOTORCTRL_FULL_STEP / 2)
 
 
 
@@ -120,6 +141,10 @@ void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
                 motorctrl_forward(&m.motor_left);
                 //m.motor_right += 0;
             }
+            else if ('s' == motor_spec)
+            {
+                // stopped
+            }
         }
         else if (ctrl_using_which() == CTRL_ARM)
         {
@@ -137,7 +162,7 @@ void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
  */
 void motorctrl_forward(int *currval)
 {
-    *currval += 50;
+    *currval += MOTORCTRL_FULL_STEP;
 }
 
 /**
@@ -146,7 +171,7 @@ void motorctrl_forward(int *currval)
  */
 void motorctrl_backward(int *currval)
 {
-    *currval -= 50;
+    *currval -= MOTORCTRL_FULL_STEP;
 }
 
 /**
@@ -154,10 +179,16 @@ void motorctrl_backward(int *currval)
  */
 int motorctrl_bound_value(int motor_val)
 {
-    if (motor_val < -100)
-        return -100;
-    else if (motor_val > 100)
-        return 100;
+#ifdef MOTORCTRL_FUZZY
+    // take the mean*(max%) of the motor value.
+    // This will produce a value between -max% .. max%
+    motor_val = (motor_val * MOTORCTRL_PERC_MAX) / MOTORCTRL_MAX_SUM;
+#endif
+    // final bounding checks
+    if (motor_val < -MOTORCTRL_PERC_MAX)
+        return -MOTORCTRL_PERC_MAX;
+    else if (motor_val > MOTORCTRL_PERC_MAX)
+        return MOTORCTRL_PERC_MAX;
     else
         return motor_val;
 }
