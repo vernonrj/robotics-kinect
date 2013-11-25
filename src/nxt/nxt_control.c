@@ -37,6 +37,8 @@ static int processAction(ubyte *str);
  */
 task main()
 {
+    nMotorEncoder[motorE] = 0;  // clear the TETRIX encoders in motors D and E
+    nMotorEncoder[motorD] = 0;
     ubyte nRcvBuffer[BT_MAX_MSG_SIZE];
     bNxtLCDStatusDisplay = true;
     wait1Msec(2000); // Give time to start the program at the far end as well
@@ -45,13 +47,18 @@ task main()
     int process_result;
     do {
         if (false == checkBTLinkConnected())
-            ErrorFatal("Connect");
+        {
+            LogMsg("Disconnected");
+            wait1Msec(1000);
+            continue;
+        }
         // wait until a message is available over bluetooth, then return it
         process_result = readMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
         if (process_result < 0)
         {
-            LogMsg("bt failure", true);
-            break;
+            LogMsg("bt failure");
+            wait1Msec(1000);
+            continue;
         }
         // uncomment to send message back to confirm received
         // TODO: this didn't seem to work when it was uncommented
@@ -63,6 +70,7 @@ task main()
             string str;
             StringFromChars(str, (char*)nRcvBuffer);
             LogMsg("bad str");
+            continue;
         }
     } while (process_result == 0);
 
@@ -87,11 +95,11 @@ static int processAction(ubyte *str)
     int motor_left = motorctrl_motor_left(mctrl);
     int motor_right = motorctrl_motor_right(mctrl);
 
-    motor[motorD] = motor_left;
-    motor[motorE] = motor_right;
     string log_str;
     sprintf(log_str, "%i | %i", motor_left, motor_right);
     LogMsg(log_str);
+    motor[motorD] = motor_left;
+    motor[motorE] = motor_right;
 
     return 0;
 }
