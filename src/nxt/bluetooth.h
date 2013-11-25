@@ -53,19 +53,22 @@ int readMessage(ubyte *data_out, int maxSize)
     {
         // Check to see if a message is available
 
-        msg_size = cCmdMessageGetSize(DefaultQueue);
-        if (msg_size <= 0)
-        {
-            return 1;        // No message this time
-        }
-
-        if (msg_size > maxSize)
-        {
-            // truncate message
-            msg_size = maxSize;
-        }
         TFileIOResult read_success;
-        read_success = cCmdMessageRead(data_out, msg_size, DefaultQueue);
+        do {
+            msg_size = cCmdMessageGetSize(DefaultQueue);
+            if (msg_size <= 0)
+            {
+                return 1;        // No message this time
+            }
+
+            if (msg_size > maxSize)
+            {
+                // truncate message
+                msg_size = maxSize;
+            }
+            read_success = cCmdMessageRead(data_out, msg_size, DefaultQueue);
+        } while (cCmdMessageGetSize(DefaultQueue) > 0);
+
         switch (read_success)
         {
             case ioRsltSuccess: return 0; break;
