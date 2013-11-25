@@ -29,6 +29,10 @@
  */
 #define MOTORCTRL_MAX_RES 8
 
+/**
+ * @brief minimum absolute value to send to motors
+ */
+#define MOTORCTRL_MIN_THESH 20
 
 /**
  * @brief how much weight is given to a single increment
@@ -125,10 +129,21 @@ void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
     while (*str != '\0')
     {
         const ubyte motor_spec = *str;
-        if (ctrl_using_which() == CTRL_MOTOR)
+        if ('t' == motor_spec)
+        {
+            // stopped
+            LogMsg("Shutdown");
+            StopAllTasks();
+        }
+        else if (ctrl_using_which() == CTRL_MOTOR)
         {
             // motor commands
-            if ('f' == motor_spec)
+            if ('s' == motor_spec)
+            {
+                // switch to arm
+                ctrl_use_arm();
+            }
+            else if ('f' == motor_spec)
             {
                 motorctrl_forward(&m.motor_left);
                 motorctrl_forward(&m.motor_right);
@@ -148,16 +163,14 @@ void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
                 motorctrl_forward(&m.motor_left);
                 //m.motor_right += 0;
             }
-            else if ('s' == motor_spec)
-            {
-                // stopped
-            }
         }
         else if (ctrl_using_which() == CTRL_ARM)
         {
             // arm commands
-            // TODO: implement. For now, get out of this state
-            ctrl_use_motor();   // FIXME: take this line out when arm is impl
+            if ('s' == motor_spec)
+            {
+                ctrl_use_motor();
+            }
         }
         str++;
     }
