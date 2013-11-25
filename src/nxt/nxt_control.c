@@ -56,6 +56,7 @@ task main()
         {
             LogMsg("bt failure");
             wait1Msec(1000);
+            process_result = 0;
             continue;
         }
         else if (process_result > 0)
@@ -82,9 +83,12 @@ task main()
             string str;
             StringFromChars(str, (char*)nRcvBuffer);
             LogMsg("bad str");
+            process_result = 0;
             continue;
         }
     } while (process_result == 0);
+
+    wait1Msec(5000);
 
     return;
 }
