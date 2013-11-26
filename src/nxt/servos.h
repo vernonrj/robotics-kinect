@@ -96,8 +96,16 @@ arm_motor_e ctrl_using_which(void)
  */
 typedef struct motorctrl_t
 {
+    // motors
     int motor_left;     //!< left motor power
     int motor_right;    //!< right motor power
+    // servos
+    int servo_thumb;    //!< thumb servo control
+    int servo_fingers;  //!< finger servo control
+    int servo_wrist;    //!< wrist servo control
+    int servo_shoulder; //!< shoulder servo control
+    int servo_5;        //!< extra servo
+    int servo_6;        //!< extra servo
 } motorctrl_t;
 
 void motorctrl_forward(int *currval);
@@ -110,9 +118,9 @@ int motorctrl_motor_right(const motorctrl_t& m);
 /**
  * @brief initialize a motorctrl_t structure
  */
-void motorctrl_init(motorctrl_t &m_ptr)
+void motorctrl_init(motorctrl_t *m_ptr)
 {
-    memset(&m_ptr, 0x0, sizeof(m_ptr));
+    memset(m_ptr, 0x0, sizeof(motorctrl_t));
 }
 
 
@@ -125,24 +133,19 @@ void motorctrl_init(motorctrl_t &m_ptr)
  */
 int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
 {
-    motorctrl_t m;
-    motorctrl_init(&m);
 
     if (NULL == m_ptr) ErrorFatal("NULL m_ptr");
+    motorctrl_init(m_ptr);
 
     if (NULL == str)
-    {
-        m_ptr->motor_left = 0;
-        m_ptr->motor_right = 0;
         return;
-    }
 
     while (*str != '\0')
     {
         const ubyte motor_spec = *str;
         if ('t' == motor_spec)
         {
-            // stopped
+            // stop command
             return 1;
         }
         else if (ctrl_using_which() == CTRL_MOTOR)
@@ -155,23 +158,23 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
             }
             else if ('f' == motor_spec)
             {
-                motorctrl_forward(&m.motor_left);
-                motorctrl_forward(&m.motor_right);
+                motorctrl_forward(&m_ptr->motor_left);
+                motorctrl_forward(&m_ptr->motor_right);
             }
             else if ('b' == motor_spec)
             {
-                motorctrl_backward(&m.motor_left);
-                motorctrl_backward(&m.motor_right);
+                motorctrl_backward(&m_ptr->motor_left);
+                motorctrl_backward(&m_ptr->motor_right);
             }
             else if ('l' == motor_spec)
             {
-                //m.motor_left += 0;
-                motorctrl_forward(&m.motor_right);
+                //m_ptr->motor_left += 0;
+                motorctrl_forward(&m_ptr->motor_right);
             }
             else if ('r' == motor_spec)
             {
-                motorctrl_forward(&m.motor_left);
-                //m.motor_right += 0;
+                motorctrl_forward(&m_ptr->motor_left);
+                //m_ptr->motor_right += 0;
             }
         }
         else if (ctrl_using_which() == CTRL_ARM)
@@ -184,8 +187,6 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
         }
         str++;
     }
-    m_ptr->motor_left = motorctrl_bound_value(m.motor_left);
-    m_ptr->motor_right = motorctrl_bound_value(m.motor_right);
 }
 
 /**

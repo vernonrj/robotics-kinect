@@ -29,6 +29,7 @@
 
 static int resetMotors(void);
 static int processAction(ubyte *str);
+static int setMotorValues(const motorctrl_t& mctrl);
 
 
 
@@ -38,8 +39,7 @@ static int processAction(ubyte *str);
 task main()
 {
     // clear the TETRIX encoders in motors D and E
-    nMotorEncoder[motorE] = 0;
-    nMotorEncoder[motorD] = 0;
+    resetMotors();
     // Bluetooth receive buffer
     ubyte nRcvBuffer[BT_MAX_MSG_SIZE];
 
@@ -105,8 +105,9 @@ task main()
  */
 static int resetMotors(void)
 {
-    motor[motorD] = 0;
-    motor[motorE] = 0;
+    motorctrl_t mctrl;
+    motorctrl_init(&mctrl);
+    setMotorValues(mctrl);
     // restart heartbeat
     ClearTimer(T1);
 }
@@ -147,3 +148,11 @@ static int processAction(ubyte *str)
 }
 
 
+/**
+ * @brief set all motors and servos based on values in mctrl
+ */
+static int setMotorValues(const motorctrl_t& mctrl)
+{
+    motor[motorD] = motorctrl_motor_left(mctrl);
+    motor[motorE] = motorctrl_motor_right(mctrl);
+}
