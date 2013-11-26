@@ -41,7 +41,7 @@ task main()
     // clear the TETRIX encoders in motors D and E
     resetMotors();
     // Bluetooth receive buffer
-    ubyte nRcvBuffer[BT_MAX_MSG_SIZE];
+    ubyte nRcvBuffer[BT_MAX_MSG_SIZE+1];
 
     // set LCD to display messages
     bNxtLCDStatusDisplay = true;
@@ -57,7 +57,7 @@ task main()
             return;
         }
         // wait until a message is available over bluetooth, then return it
-        process_result = readMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
+        process_result = readMessage(nRcvBuffer, BT_MAX_MSG_SIZE+1);
         if (process_result < 0)
         {
             ErrorFatal("bt read failure");

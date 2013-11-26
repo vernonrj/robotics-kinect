@@ -48,6 +48,7 @@ int readMessage(ubyte *data_out, int maxSize)
         // bluetooth not connected. Return now as error
         return -1;
     }
+    memset(nRcvBuffer, 0x0, sizeof(ubyte)*maxSize);
 
     while (true)
     {
@@ -61,10 +62,10 @@ int readMessage(ubyte *data_out, int maxSize)
                 return 1;        // No message this time
             }
 
-            if (msg_size > maxSize)
+            if (msg_size > (maxSize-1))
             {
                 // truncate message
-                msg_size = maxSize;
+                msg_size = maxSize - 1;
             }
             read_success = cCmdMessageRead(data_out, msg_size, DefaultQueue);
         } while (cCmdMessageGetSize(DefaultQueue) > 0);
