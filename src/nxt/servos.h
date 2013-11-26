@@ -181,10 +181,29 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
         else if (ctrl_using_which() == CTRL_ARM)
         {
             // arm commands
-            if ('s' == motor_spec)
+            switch (motor_spec)
             {
-                LogMsg("--> Motor");
-                ctrl_use_motor();
+                case 's':
+                    // switch to motor
+                    LogMsg("--> Motor");
+                    ctrl_use_motor();
+                    break;
+                case 'a':
+                    // move hand
+                    m_ptr->servo_hand = 100;
+                    break;
+                case 'e':
+                    // move hand
+                    m_ptr->servo_hand = -100;
+                    break;
+                case 'd':
+                    // move wrist
+                    m_ptr->servo_wrist = 10;
+                    break;
+                case 'g':
+                    // move wrist
+                    m_ptr->servo_wrist = -10;
+                    break;
             }
         }
         str++;
