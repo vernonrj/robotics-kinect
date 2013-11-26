@@ -64,7 +64,7 @@ task main()
         }
         else if (process_result > 0)
         {
-            if (time1[T1] < 100)
+            if (time1[T1] >= 100)
             {
                 // zero out if running for too long without
                 // an update
@@ -84,13 +84,16 @@ task main()
         process_result = processAction(nRcvBuffer);
         if (process_result < 0)
         {
-            LogMsg("bad str");
+            resetMotors();
+            ErrorMsg("bad str");
             wait1Msec(1);
             process_result = 0;
             continue;
         }
     } while (process_result == 0);
 
+    resetMotors();
+    LogMsg("Shutdown");
     wait1Msec(5000);
 
     return;
@@ -116,12 +119,14 @@ static int resetMotors(void)
  * parses characters received. Can receive multiple characters,
  * so for instance, receiving an 'ff' will say "forward *2".
  * @returns
- * On success, returns 0. On error, returns -1.
+ * On success, returns 0.
+ * On shutdown signal, returns 1.
+ * On error, returns -1.
  */
 static int processAction(ubyte *str)
 {
     motorctrl_t mctrl;
-    motorctrl_update(&mctrl, str);
+    int remote_status = motorctrl_update(&mctrl, str);
     int motor_left = motorctrl_motor_left(mctrl);
     int motor_right = motorctrl_motor_right(mctrl);
 
@@ -132,5 +137,13 @@ static int processAction(ubyte *str)
     motor[motorE] = motor_right;
     ClearTimer(T1);
 
+    if (remote_status > 0)
+    {
+        // shutdown system
+        return 1;
+    }
+
     return 0;
 }
+
+

@@ -6,6 +6,17 @@
 #define __LOGGING_H__
 #pragma platform(NXT)
 
+/**
+ * @brief logs a nonfatal error message
+ */
+void ErrorMsg(const string& errmsg)
+{
+    eraseDisplay();
+    PlaySound(soundLowBuzz);
+    nxtDisplayCenteredTextLine(3, "ERROR");
+    nxtDisplayCenteredTextLine(4, errmsg);
+}
+
 
 /**
  * @brief logs a fatal error and terminates function
@@ -13,10 +24,10 @@
 void ErrorFatal(const string& errmsg)
 {
     eraseDisplay();
-    nxtDisplayCenteredTextLine(3, "ERROR");
+    PlaySound(soundLowBuzz);
+    PlaySound(soundLowBuzz);
+    nxtDisplayCenteredTextLine(3, "FATAL");
     nxtDisplayCenteredTextLine(4, errmsg);
-    PlaySound(soundLowBuzz);
-    PlaySound(soundLowBuzz);
     wait1Msec(3000);
     StopAllTasks();
 }

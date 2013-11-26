@@ -119,9 +119,11 @@ void motorctrl_init(motorctrl_t &m_ptr)
 /**
  * @brief updates a motorctrl_t structure with new motor magnitude specs
  * @param str char array returned from a bluetooth read
- * @returns Returns a structure for setting motor values
+ * @returns
+ * Returns 0 on success, positive when stop signal received,
+ * negative on error
  */
-void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
+int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
 {
     motorctrl_t m;
     motorctrl_init(&m);
@@ -141,8 +143,7 @@ void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
         if ('t' == motor_spec)
         {
             // stopped
-            LogMsg("Shutdown");
-            StopAllTasks();
+            return 1;
         }
         else if (ctrl_using_which() == CTRL_MOTOR)
         {
