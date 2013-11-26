@@ -107,6 +107,14 @@ int motorctrl_motor_left(const motorctrl_t& m);
 int motorctrl_motor_right(const motorctrl_t& m);
 
 
+/**
+ * @brief initialize a motorctrl_t structure
+ */
+void motorctrl_init(motorctrl_t &m_ptr)
+{
+    memset(&m_ptr, 0x0, sizeof(m_ptr));
+}
+
 
 /**
  * @brief updates a motorctrl_t structure with new motor magnitude specs
@@ -116,8 +124,9 @@ int motorctrl_motor_right(const motorctrl_t& m);
 void motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
 {
     motorctrl_t m;
-    m.motor_left = 0;
-    m.motor_right = 0;
+    motorctrl_init(&m);
+
+    if (NULL == m_ptr) ErrorFatal("NULL m_ptr");
 
     if (NULL == str)
     {

@@ -27,6 +27,7 @@
 #define BT_MAX_MSG_SIZE MOTORCTRL_MAX_RES
 
 
+static int resetMotors(void);
 static int processAction(ubyte *str);
 
 
@@ -65,7 +66,7 @@ task main()
             {
                 // zero out if running for more than 10 msecs without
                 // an update
-                processAction(NULL);
+                resetMotors();
             }
             else
             {
@@ -93,6 +94,17 @@ task main()
     return;
 }
 
+
+/**
+ * @brief shut off all running motors and servos
+ */
+static int resetMotors(void)
+{
+    motor[motorD] = 0;
+    motor[motorE] = 0;
+    // restart heartbeat
+    ClearTimer(T1);
+}
 
 
 /**
