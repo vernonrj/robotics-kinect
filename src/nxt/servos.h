@@ -96,8 +96,8 @@ arm_motor_e ctrl_using_which(void)
  */
 typedef struct motorctrl_t
 {
-    int motor_left;
-    int motor_right;
+    int motor_left;     //!< left motor power
+    int motor_right;    //!< right motor power
 } motorctrl_t;
 
 void motorctrl_forward(int *currval);

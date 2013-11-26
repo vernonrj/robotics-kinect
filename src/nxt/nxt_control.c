@@ -37,14 +37,19 @@ static int processAction(ubyte *str);
  */
 task main()
 {
-    nMotorEncoder[motorE] = 0;  // clear the TETRIX encoders in motors D and E
+    // clear the TETRIX encoders in motors D and E
+    nMotorEncoder[motorE] = 0;
     nMotorEncoder[motorD] = 0;
+    // Bluetooth receive buffer
     ubyte nRcvBuffer[BT_MAX_MSG_SIZE];
+
+    // set LCD to display messages
     bNxtLCDStatusDisplay = true;
-    wait1Msec(2000); // Give time to start the program at the far end as well
+    // Give time to start the program at the far end as well
+    wait1Msec(2000);
 
     // run until a break signal is sent (set in process_result)
-    int process_result;
+    int process_result = 0;
     do {
         if (false == checkBTLinkConnected())
         {
@@ -55,16 +60,13 @@ task main()
         process_result = readMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
         if (process_result < 0)
         {
-            LogMsg("bt failure");
-            wait1Msec(1000);
-            process_result = 0;
-            continue;
+            ErrorFatal("bt read failure");
         }
         else if (process_result > 0)
         {
             if (time1[T1] < 100)
             {
-                // zero out if running for more than 10 msecs without
+                // zero out if running for too long without
                 // an update
                 resetMotors();
             }
@@ -72,6 +74,7 @@ task main()
             {
                 wait1Msec(1);
             }
+            process_result = 0;
             continue;
         }
         // uncomment to send message back to confirm received
@@ -81,9 +84,8 @@ task main()
         process_result = processAction(nRcvBuffer);
         if (process_result < 0)
         {
-            string str;
-            StringFromChars(str, (char*)nRcvBuffer);
             LogMsg("bad str");
+            wait1Msec(1);
             process_result = 0;
             continue;
         }
