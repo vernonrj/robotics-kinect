@@ -20,6 +20,9 @@ void ErrorMsg(const string& errmsg)
 
 /**
  * @brief logs a fatal error and terminates function
+ * @note
+ * there is a substantial pause in execution during this function.
+ * call resetMotors() before calling this to keep robot from going crazy
  */
 void ErrorFatal(const string& errmsg)
 {

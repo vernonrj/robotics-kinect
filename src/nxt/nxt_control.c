@@ -64,10 +64,11 @@ task main()
         }
         else if (process_result > 0)
         {
+            // No messages to read.
+            // Check time since last message was received
             if (time1[T1] >= 100)
             {
-                // zero out if running for too long without
-                // an update
+                // zero out if running for too long without an update
                 resetMotors();
             }
             else
@@ -156,3 +157,5 @@ static int setMotorValues(const motorctrl_t& mctrl)
     motor[motorD] = motorctrl_motor_left(mctrl);
     motor[motorE] = motorctrl_motor_right(mctrl);
 }
+
+

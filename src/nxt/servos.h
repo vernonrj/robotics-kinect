@@ -154,6 +154,7 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
             if ('s' == motor_spec)
             {
                 // switch to arm
+                LogMsg("--> Arm");
                 ctrl_use_arm();
             }
             else if ('f' == motor_spec)
@@ -182,6 +183,7 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
             // arm commands
             if ('s' == motor_spec)
             {
+                LogMsg("--> Motor");
                 ctrl_use_motor();
             }
         }
