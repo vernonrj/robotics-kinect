@@ -48,7 +48,7 @@ int readMessage(ubyte *data_out, int maxSize)
         // bluetooth not connected. Return now as error
         return -1;
     }
-    memset(nRcvBuffer, 0x0, sizeof(ubyte)*maxSize);
+    memset(data_out, 0x0, sizeof(ubyte)*maxSize);
 
     while (true)
     {

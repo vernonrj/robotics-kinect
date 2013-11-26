@@ -27,9 +27,9 @@
 #define BT_MAX_MSG_SIZE MOTORCTRL_MAX_RES
 
 
-static int resetMotors(void);
+static void resetMotors(void);
 static int processAction(ubyte *str);
-static int setMotorValues(const motorctrl_t& mctrl);
+static void setMotorValues(const motorctrl_t& mctrl);
 
 
 
@@ -104,7 +104,7 @@ task main()
 /**
  * @brief shut off all running motors and servos
  */
-static int resetMotors(void)
+static void resetMotors(void)
 {
     motorctrl_t mctrl;
     motorctrl_init(&mctrl);
@@ -152,7 +152,7 @@ static int processAction(ubyte *str)
 /**
  * @brief set all motors and servos based on values in mctrl
  */
-static int setMotorValues(const motorctrl_t& mctrl)
+static void setMotorValues(const motorctrl_t& mctrl)
 {
     motor[motorD] = motorctrl_motor_left(mctrl);
     motor[motorE] = motorctrl_motor_right(mctrl);

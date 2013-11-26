@@ -100,6 +100,7 @@ typedef struct motorctrl_t
     int motor_left;     //!< left motor power
     int motor_right;    //!< right motor power
     // servos
+    int servo_hand;     //!< hand servo control
     int servo_thumb;    //!< thumb servo control
     int servo_fingers;  //!< finger servo control
     int servo_wrist;    //!< wrist servo control
@@ -138,7 +139,7 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
     motorctrl_init(m_ptr);
 
     if (NULL == str)
-        return;
+        return 0;
 
     while (*str != '\0')
     {
@@ -208,6 +209,7 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
         }
         str++;
     }
+    return 0;
 }
 
 /**
