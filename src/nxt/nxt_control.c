@@ -76,22 +76,25 @@ task main()
                 wait1Msec(1);
             }
             process_result = 0;
-            continue;
         }
-        // uncomment to send message back to confirm received
-        // TODO: this didn't seem to work when it was uncommented
-        //writeMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
-        // process message read from bluetooth
-        process_result = processAction(nRcvBuffer);
-        if (process_result < 0)
+        else
         {
-            resetMotors();
-            ErrorMsg("bad str");
-            wait1Msec(1);
-            process_result = 0;
-            continue;
+            // uncomment to send message back to confirm received
+            // TODO: this didn't seem to work when it was uncommented
+            //writeMessage(nRcvBuffer, BT_MAX_MSG_SIZE);
+            // process message read from bluetooth
+            process_result = processAction(nRcvBuffer);
+            if (process_result < 0)
+            {
+                resetMotors();
+                ErrorMsg("bad str");
+                wait1Msec(1);
+                process_result = 0;
+            }
+            else if (process_result > 0)
+                break;
         }
-    } while (process_result == 0);
+    } while (true);
 
     resetMotors();
     LogMsg("Shutdown");
