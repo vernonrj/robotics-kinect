@@ -27,6 +27,16 @@
 #define BT_MAX_MSG_SIZE MOTORCTRL_MAX_RES
 
 
+/**
+ * @brief timeout before motors are stopped, or disabled if zero
+ *
+ * If nonzero, motors are stopped if a bluetooth message hasn't been
+ * received in a specified period of time.
+ *
+ * If zero, timeout is disabled.
+ */
+#define BT_MSG_TIMEOUT 0
+
 static void resetMotors(void);
 static int processAction(ubyte *str);
 static void setMotorValues(void);
@@ -67,16 +77,15 @@ task main()
         else if (process_result > 0)
         {
             // No messages to read.
+#if BT_MSG_TIMEOUT != 0
             // Check time since last message was received
             if (time1[T1] >= 100)
             {
                 // zero out if running for too long without an update
                 //resetMotors();
             }
-            else
-            {
-                wait1Msec(1);
-            }
+#endif
+            wait1Msec(1);
             process_result = 0;
         }
         else
