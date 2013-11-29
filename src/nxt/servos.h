@@ -134,7 +134,7 @@ void motorctrl_init(motorctrl_t *m_ptr)
  */
 int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
 {
-
+    int index = 0;
     if (NULL == m_ptr) ErrorFatal("NULL m_ptr");
     motorctrl_init(m_ptr);
 
@@ -143,6 +143,7 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
 
     while (*str != '\0')
     {
+        index++;
         const ubyte motor_spec = *str;
         if ('t' == motor_spec)
         {
@@ -160,8 +161,8 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
             }
             else if ('f' == motor_spec)
             {
-                motorctrl_forward(&m_ptr->motor_left);
-                motorctrl_forward(&m_ptr->motor_right);
+                motorctrl_forward(&(m_ptr->motor_left));
+                motorctrl_forward(&(m_ptr->motor_right));
             }
             else if ('b' == motor_spec)
             {
@@ -209,7 +210,10 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
         }
         str++;
     }
-    return 0;
+    if (0 == index)
+        return -1;
+    else
+        return 0;
 }
 
 /**
@@ -218,7 +222,7 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
  */
 void motorctrl_forward(int *currval)
 {
-    *currval += MOTORCTRL_FULL_STEP;
+    *currval = *currval + MOTORCTRL_FULL_STEP;
 }
 
 /**
@@ -227,7 +231,7 @@ void motorctrl_forward(int *currval)
  */
 void motorctrl_backward(int *currval)
 {
-    *currval -= MOTORCTRL_FULL_STEP;
+    *currval = *currval - MOTORCTRL_FULL_STEP;
 }
 
 /**

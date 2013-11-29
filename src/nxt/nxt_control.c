@@ -29,9 +29,10 @@
 
 static void resetMotors(void);
 static int processAction(ubyte *str);
-static void setMotorValues(const motorctrl_t& mctrl);
+static void setMotorValues(void);
 
 
+static motorctrl_t MotorCfg;
 
 /**
  * @brief main task
@@ -40,6 +41,7 @@ task main()
 {
     // clear the TETRIX encoders in motors D and E
     resetMotors();
+    memset(&MotorCfg, 0x0, sizeof(MotorCfg));
     // Bluetooth receive buffer
     ubyte nRcvBuffer[BT_MAX_MSG_SIZE+1];
 
@@ -69,7 +71,7 @@ task main()
             if (time1[T1] >= 100)
             {
                 // zero out if running for too long without an update
-                resetMotors();
+                //resetMotors();
             }
             else
             {
@@ -109,9 +111,9 @@ task main()
  */
 static void resetMotors(void)
 {
-    motorctrl_t mctrl;
-    motorctrl_init(&mctrl);
-    setMotorValues(mctrl);
+    MotorCfg.motor_left = 0;
+    MotorCfg.motor_right = 0;
+    setMotorValues();
     // restart heartbeat
     ClearTimer(T1);
 }
@@ -130,16 +132,23 @@ static void resetMotors(void)
  */
 static int processAction(ubyte *str)
 {
-    motorctrl_t mctrl;
-    int remote_status = motorctrl_update(&mctrl, str);
-    int motor_left = motorctrl_motor_left(mctrl);
-    int motor_right = motorctrl_motor_right(mctrl);
+    int remote_status = motorctrl_update(&MotorCfg, str);
+    if (remote_status == -1)
+        return 0;
+    setMotorValues();
+    int motor_left = motorctrl_motor_left(MotorCfg);
+    int motor_right = motorctrl_motor_right(MotorCfg);
 
     string log_str;
-    sprintf(log_str, "%i | %i", motor_left, motor_right);
-    LogMsg(log_str);
-    motor[motorD] = motor_left;
-    motor[motorE] = motor_right;
+    if (motor_left > 0 && motor_right > 0) LogMsg("Forward");
+    else if (motor_left > 0) LogMsg("Right");
+    else if (motor_right > 0) LogMsg("Left");
+    else if (motor_left < 0 && motor_right < 0) LogMsg("Back");
+    else LogMsg("Stop");
+
+
+    //sprintf(log_str, "%d | %d", motor_left, motor_right);
+    //LogMsg(log_str);
     ClearTimer(T1);
 
     if (remote_status > 0)
@@ -153,12 +162,12 @@ static int processAction(ubyte *str)
 
 
 /**
- * @brief set all motors and servos based on values in mctrl
+ * @brief set all motors and servos based on values in MotorCfg
  */
-static void setMotorValues(const motorctrl_t& mctrl)
+static void setMotorValues()
 {
-    motor[motorD] = motorctrl_motor_left(mctrl);
-    motor[motorE] = motorctrl_motor_right(mctrl);
+    motor[motorD] = motorctrl_motor_left(MotorCfg);
+    motor[motorE] = motorctrl_motor_right(MotorCfg);
 }
 
 
