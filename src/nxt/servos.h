@@ -145,7 +145,7 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
     {
         index++;
         const ubyte motor_spec = *str;
-        if ('t' == motor_spec)
+        if ('k' == motor_spec)
         {
             // stop command
             return 1;
@@ -158,6 +158,9 @@ int motorctrl_update(motorctrl_t *m_ptr, ubyte *str)
                 // switch to arm
                 LogMsg("--> Arm");
                 ctrl_use_arm();
+            }
+            else if ('t' == motor_spec)
+            {
             }
             else if ('f' == motor_spec)
             {
