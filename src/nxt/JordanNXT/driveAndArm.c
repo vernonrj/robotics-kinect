@@ -4,9 +4,9 @@
 #pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     motorF,        tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     motorG,        tmotorTetrix, PIDControl, encoder)
-#pragma config(Servo,  srvo_S1_C3_1,    hand_oc,              tServoStandard)
-#pragma config(Servo,  srvo_S1_C3_2,    wrist_lr,             tServoStandard)
-#pragma config(Servo,  srvo_S1_C3_3,    wrist_ud,             tServoStandard)
+#pragma config(Servo,  srvo_S1_C3_1,    hand_oc,              tServoContinuousRotation)
+#pragma config(Servo,  srvo_S1_C3_2,    wrist_lr,             tServoContinuousRotation)
+#pragma config(Servo,  srvo_S1_C3_3,    wrist_ud,             tServoContinuousRotation)
 #pragma config(Servo,  srvo_S1_C3_4,    shoulder_lr,          tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_6,    servo6,               tServoNone)
@@ -136,11 +136,11 @@ task main()
 						 else if (str == "s"){drive = false;}}
 
 					  else if (!drive){
-					  	if (str == "a"){servo[hand_oc] = 100;LogMsg(str);}
+					  	if (str == "a"){servoChangeRate[hand_oc] = 1; servo[hand_oc] = 128;}
 
-					  	else if (str == "e"){servo[hand_oc] = -100;}
+					  	else if (str == "e"){servoChangeRate[hand_oc] = 1; servo[hand_oc] = 128;}
 
-					  	else if(str == "c"){servo[wrist_lr] = 10;}
+					  	else if(str == "c"){servo[wrist_lr] = 0;}
 
 					  	else if (str == "d"){servo[wrist_lr] = -10;}
 

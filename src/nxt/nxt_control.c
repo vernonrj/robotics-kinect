@@ -2,9 +2,9 @@
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop)
-#pragma config(Servo,  srvo_S1_C2_1,    thumb,                tServoStandard)
-#pragma config(Servo,  srvo_S1_C2_2,    fingers,              tServoStandard)
-#pragma config(Servo,  srvo_S1_C2_3,    wrist,                tServoStandard)
+#pragma config(Servo,  srvo_S1_C2_1,    thumb,                tServoContinuousRotation)
+#pragma config(Servo,  srvo_S1_C2_2,    fingers,              tServoContinuousRotation)
+#pragma config(Servo,  srvo_S1_C2_3,    wrist,                tServoContinuousRotation)
 #pragma config(Servo,  srvo_S1_C2_4,    shoulder,             tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S1_C2_6,    servo6,               tServoNone)
@@ -178,5 +178,3 @@ static void setMotorValues()
     motor[motorD] = motorctrl_motor_left(MotorCfg);
     motor[motorE] = motorctrl_motor_right(MotorCfg);
 }
-
-
