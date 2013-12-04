@@ -4,9 +4,9 @@
 #pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     motorF,        tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     motorG,        tmotorTetrix, PIDControl, encoder)
-#pragma config(Servo,  srvo_S1_C3_1,    hand_oc,              tServoContinuousRotation)
-#pragma config(Servo,  srvo_S1_C3_2,    wrist_lr,             tServoContinuousRotation)
-#pragma config(Servo,  srvo_S1_C3_3,    wrist_ud,             tServoContinuousRotation)
+#pragma config(Servo,  srvo_S1_C3_1,    hand_oc,              tServoStandard)
+#pragma config(Servo,  srvo_S1_C3_2,    wrist_lr,             tServoStandard)
+#pragma config(Servo,  srvo_S1_C3_3,    wrist_ud,             tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_4,    shoulder_lr,          tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_6,    servo6,               tServoNone)
@@ -29,6 +29,7 @@
 //const int kTimeBetweenXmit = 30;
 const int kMaxSizeOfMessage = 5;
 const TMailboxIDs kQueueID = mailbox1;
+
 
 void ErrorFatal(const string& errmsg)
 {
@@ -110,6 +111,10 @@ task main()
 		bool drive;
 		drive = true;
 
+		servo[hand_oc] = 200;
+		servo[wrist_lr] = 100;
+		servo[wrist_ud] = 100;
+
     //
     // Send and receive 1M messages
     //
@@ -123,40 +128,90 @@ task main()
         {
            StringFromChars(str, (char*)nRcvBuffer);
            if (drive){
-		         if (str == "f"){ motor[motorD] = 50; motor[motorE] = 50; }
+		         if (str == "f"){
+		           motor[motorD] = 50;
+		           motor[motorE] = 50;}
 
-						 else if (str == "b"){motor[motorD] = -50; motor[motorE] = -50; }
+		         else if (str == "q"){
+		           motor[motorD] = 100;
+		           motor[motorE] = 100; }
 
-						 else if (str == "l"){motor[motorD] = 0; motor[motorE] = 50; }
+						 else if (str == "b"){
+						   motor[motorD] = -50;
+						   motor[motorE] = -50;}
 
-						 else if (str == "r"){motor[motorD] = 50; motor[motorE] = 0; }
+						 else if (str == "l"){
+						   motor[motorD] = 0;
+						   motor[motorE] = 50;}
 
-						 else if (str == "t"){motor[motorD] = 0; motor[motorE] = 0; }
+						 else if (str == "r"){
+						   motor[motorD] = 50;
+						   motor[motorE] = 0;}
+
+						 else if (str == "t"){
+						   motor[motorD] = 0;
+						   motor[motorE] = 0;}
 
 						 else if (str == "s"){drive = false;}}
 
 					  else if (!drive){
-					  	if (str == "a"){servoChangeRate[hand_oc] = 1; servo[hand_oc] = 128;}
+					  	if (str == "a"){
+					  		//servoChangeRate[hand_oc] = 1;
+					  		servo[hand_oc] = ServoValue(hand_oc) + 5;}
 
-					  	else if (str == "e"){servoChangeRate[hand_oc] = 1; servo[hand_oc] = 128;}
+					  	else if (str == "e"){
+					  		//servoChangeRate[hand_oc] = 1;
+					  		servo[hand_oc] = ServoValue(hand_oc) - 5;}
 
-					  	else if(str == "c"){servo[wrist_lr] = 0;}
+					  	else if(str == "c"){
+					  		servo[wrist_lr] = ServoValue(wrist_lr) + 5;}
 
-					  	else if (str == "d"){servo[wrist_lr] = -10;}
+					  	else if (str == "d"){
+					  		servo[wrist_lr] = ServoValue(wrist_lr) - 5;}
 
-					  	else if (str == "g"){servo[wrist_ud] = 10;}
+					  	else if (str == "g"){
+					  		servo[wrist_ud] = ServoValue(wrist_ud) + 5;}
 
-					  	else if (str == "h"){servo[wrist_ud] = -10;}
+					  	else if (str == "h"){
+					  		servo[wrist_ud] = ServoValue(wrist_ud) - 5;}
 
-					  	//else if (str == "i"){servo[shoulder_lr] = -10;}
+					  	else if ((str == "i") && (ServoValue(hand_oc) <= 220)){
+					  		servo[shoulder_lr] = ServoValue(shoulder_lr) + 5;}
 
-					  	//else if (str == "j"){servo[shoulder_lr] = -10;}
+					  	else if ((str == "j") && (ServoValue(hand_oc) >= 20)){
+					  		servo[shoulder_lr] = ServoValue(shoulder_lr) - 5;}
 
-					  	//else if (str == "k"){servo[wrist] = -10;}
+					  	else if (str == "k")
+					  		{motor[motorF] = 25;
+					  			wait1Msec(100);
+					  			motor[motorF] = 0;}
 
-					  	//else if (str == "m"){servo[wrist] = -10;}
+					  	else if (str == "m"){
+					  		motor[motorF] = -25;
+					  		wait1Msec(100);
+					  		motor[motorF] = 0;}
 
-					  	else if (str == "s"){drive = true;}}
+					  	else if (str == "x"){
+					  		motor[motorG] = 30;
+					  		wait1Msec(100);
+					  		motor[motorG] = 0;
+					  		//bFloatDuringInactiveMotorPWM = false;}  // brake
+					  		motor[motorG] = 10;
+					  		wait1Msec(100);
+					  		motor[motorG] = 0;}
+
+
+					  	else if (str == "z"){
+								motor[motorG] = -15;
+					  		wait1Msec(100);
+					  		motor[motorG] = 0;
+					  		//bFloatDuringInactiveMotorPWM = false;}  // brake
+					  		motor[motorG] = 10;
+					  		wait1Msec(100);
+					  		motor[motorG] = 0;}
+
+					  	else if (str == "s"){
+					  		drive = true;}}
 						//nSendTotal = 0;
         }
         wait1Msec(1);

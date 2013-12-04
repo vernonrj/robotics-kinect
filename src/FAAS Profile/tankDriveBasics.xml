@@ -22,7 +22,7 @@
 	<savewindowlayout>false</savewindowlayout>
 </display>
 <gestures>
-	<gesture name="foward" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+	<gesture name="forward" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
 		<input type="1">
 			<descriptor>left wrist</descriptor>
 			<descriptor>above</descriptor>
@@ -42,6 +42,30 @@
 		<output type="0">
 			<descriptor>press</descriptor>
 			<descriptor>f</descriptor>
+			<descriptor>for</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="forward_fast" timeout="0" enabled="false" outputloop="false" outputtimeout="0">
+		<input type="1">
+			<descriptor>right wrist</descriptor>
+			<descriptor>above</descriptor>
+			<descriptor>right elbow</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>25</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<input type="1">
+			<descriptor>left wrist</descriptor>
+			<descriptor>above</descriptor>
+			<descriptor>left elbow</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>25</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>press</descriptor>
+			<descriptor>q</descriptor>
 			<descriptor>for</descriptor>
 			<descriptor>0</descriptor>
 		</output>
@@ -147,7 +171,7 @@
 			<descriptor>left hand</descriptor>
 			<descriptor>to the left</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>500</descriptor>
+			<descriptor>400</descriptor>
 			<descriptor>cm/sec</descriptor>
 		</input>
 		<output type="0">
@@ -157,28 +181,28 @@
 			<descriptor>0</descriptor>
 		</output>
 	</gesture>
-	<gesture name="kill emulation" timeout="0" enabled="false" outputloop="false" outputtimeout="0">
+	<gesture name="kill emulation" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
 		<input type="3">
 			<descriptor>left hand</descriptor>
 			<descriptor>to the left</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>300</descriptor>
+			<descriptor>400</descriptor>
 			<descriptor>cm/sec</descriptor>
 		</input>
 		<input type="3">
 			<descriptor>right hand</descriptor>
 			<descriptor>to the right</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>300</descriptor>
+			<descriptor>400</descriptor>
 			<descriptor>cm/sec</descriptor>
 		</input>
 		<output type="6">
 			<descriptor>stop emulator</descriptor>
 		</output>
 	</gesture>
-	<gesture name="hand open" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+	<gesture name="hand open" timeout="0" enabled="true" outputloop="true" outputtimeout="0">
 		<input type="3">
-			<descriptor>right hand</descriptor>
+			<descriptor>left hand</descriptor>
 			<descriptor>to the right</descriptor>
 			<descriptor>at least</descriptor>
 			<descriptor>300</descriptor>
@@ -191,9 +215,9 @@
 			<descriptor>0</descriptor>
 		</output>
 	</gesture>
-	<gesture name="hand close" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+	<gesture name="hand close" timeout="0" enabled="true" outputloop="true" outputtimeout="0">
 		<input type="3">
-			<descriptor>right hand</descriptor>
+			<descriptor>left hand</descriptor>
 			<descriptor>to the left</descriptor>
 			<descriptor>at least</descriptor>
 			<descriptor>300</descriptor>
@@ -207,6 +231,14 @@
 		</output>
 	</gesture>
 	<gesture name="wrist up" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+		<input type="1">
+			<descriptor>right hand</descriptor>
+			<descriptor>above</descriptor>
+			<descriptor>right wrist</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>2</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
 		<output type="0">
 			<descriptor>press</descriptor>
 			<descriptor>c</descriptor>
@@ -215,6 +247,14 @@
 		</output>
 	</gesture>
 	<gesture name="wrist down" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+		<input type="1">
+			<descriptor>right hand</descriptor>
+			<descriptor>below</descriptor>
+			<descriptor>right wrist</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>2</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
 		<output type="0">
 			<descriptor>press</descriptor>
 			<descriptor>d</descriptor>
@@ -222,23 +262,15 @@
 			<descriptor>0</descriptor>
 		</output>
 	</gesture>
-	<gesture name="shoulder left" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
-		<output type="0">
-			<descriptor>press</descriptor>
-			<descriptor>g</descriptor>
-			<descriptor>for</descriptor>
-			<descriptor>0</descriptor>
-		</output>
-	</gesture>
-	<gesture name="shoulder right" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
-		<output type="0">
-			<descriptor>press</descriptor>
-			<descriptor>h</descriptor>
-			<descriptor>for</descriptor>
-			<descriptor>0</descriptor>
-		</output>
-	</gesture>
-	<gesture name="shoulder up" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+	<gesture name="shoulder left" timeout="0" enabled="true" outputloop="true" outputtimeout="0">
+		<input type="1">
+			<descriptor>right elbow</descriptor>
+			<descriptor>to the left of</descriptor>
+			<descriptor>right shoulder</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>5</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
 		<output type="0">
 			<descriptor>press</descriptor>
 			<descriptor>i</descriptor>
@@ -246,7 +278,15 @@
 			<descriptor>0</descriptor>
 		</output>
 	</gesture>
-	<gesture name="shoulder down" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+	<gesture name="shoulder right" timeout="0" enabled="true" outputloop="true" outputtimeout="0">
+		<input type="1">
+			<descriptor>right elbow</descriptor>
+			<descriptor>to the right of</descriptor>
+			<descriptor>right shoulder</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>5</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
 		<output type="0">
 			<descriptor>press</descriptor>
 			<descriptor>j</descriptor>
@@ -254,7 +294,47 @@
 			<descriptor>0</descriptor>
 		</output>
 	</gesture>
+	<gesture name="shoulder up" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+		<input type="1">
+			<descriptor>right elbow</descriptor>
+			<descriptor>above</descriptor>
+			<descriptor>right shoulder</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>5</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>press</descriptor>
+			<descriptor>z</descriptor>
+			<descriptor>for</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="shoulder down" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+		<input type="1">
+			<descriptor>right elbow</descriptor>
+			<descriptor>below</descriptor>
+			<descriptor>right shoulder</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>5</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>press</descriptor>
+			<descriptor>x</descriptor>
+			<descriptor>for</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
 	<gesture name="elbow up" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+		<input type="1">
+			<descriptor>right wrist</descriptor>
+			<descriptor>above</descriptor>
+			<descriptor>right elbow</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>5</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
 		<output type="0">
 			<descriptor>press</descriptor>
 			<descriptor>k</descriptor>
@@ -263,6 +343,14 @@
 		</output>
 	</gesture>
 	<gesture name="elbow down" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+		<input type="1">
+			<descriptor>right wrist</descriptor>
+			<descriptor>below</descriptor>
+			<descriptor>right elbow</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>5</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
 		<output type="0">
 			<descriptor>press</descriptor>
 			<descriptor>m</descriptor>
