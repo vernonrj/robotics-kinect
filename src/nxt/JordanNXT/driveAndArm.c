@@ -104,118 +104,154 @@ int readMessage(ubyte *nRcvBuffer, int maxSize)
 
 task main()
 {
-    ubyte nRcvBuffer[kMaxSizeOfMessage];
-    bNxtLCDStatusDisplay = true;
-    wait1Msec(2000); // Give time to start the program at the far end as well
-		string str;
-		bool drive;
-		drive = true;
+	ubyte nRcvBuffer[kMaxSizeOfMessage];
+	bNxtLCDStatusDisplay = true;
+	wait1Msec(2000); // Give time to start the program at the far end as well
+	string str;
+	bool drive;
+	bool arm;
+	drive = true;
+	arm = false;
 
-		servo[hand_oc] = 200;
-		servo[wrist_lr] = 100;
-		servo[wrist_ud] = 100;
+	servoChangeRate[hand_oc] = 2;
+	servoChangeRate[wrist_lr] = 2;
+	servoChangeRate[wrist_ud] = 2;
+	servoChangeRate[shoulder_lr] = 2;
+	servoTarget[hand_oc] = 200;
+	servoTarget[wrist_lr] = 180;
+	servoTarget[wrist_ud] = 80;
+	servoTarget[shoulder_lr] = 127;
 
-    //
-    // Send and receive 1M messages
-    //
-    for (long nSendTotal = 0; nSendTotal < 1000000; ++nSendTotal)
-    {
-        if (false == checkBTLinkConnected())
-            ErrorFatal("Connect");
-        //sendDataMsg();
-        int success = readMessage(nRcvBuffer, kMaxSizeOfMessage);
-        if (success == 0)
-        {
-           StringFromChars(str, (char*)nRcvBuffer);
-           if (drive){
-		         if (str == "f"){
-		           motor[motorD] = 50;
-		           motor[motorE] = 50;}
+	//
+	// Send and receive 1M messages
+	//
+	for (long nSendTotal = 0; nSendTotal < 1000000; ++nSendTotal)
+	{
+		if (false == checkBTLinkConnected())
+			ErrorFatal("Connect");
+		//sendDataMsg();
+		int success = readMessage(nRcvBuffer, kMaxSizeOfMessage);
+		if (success == 0)
+		{
+			StringFromChars(str, (char*)nRcvBuffer);
+			if (drive)
+			{
+				if (str == "f")
+				{
+					motor[motorD] = 50;
+					motor[motorE] = 50;
+				}
+				else if (str == "q")
+				{
+					motor[motorD] = 100;
+					motor[motorE] = 100;
+				}
 
-		         else if (str == "q"){
-		           motor[motorD] = 100;
-		           motor[motorE] = 100; }
+				else if (str == "b")
+				{
+					motor[motorD] = -50;
+					motor[motorE] = -50;
+				}
+				else if (str == "l")
+				{
+					motor[motorD] = 0;
+					motor[motorE] = 50;
+				}
+				else if (str == "r")
+				{
+					motor[motorD] = 50;
+					motor[motorE] = 0;
+				}
 
-						 else if (str == "b"){
-						   motor[motorD] = -50;
-						   motor[motorE] = -50;}
+				else if (str == "t")
+				{
+					motor[motorD] = 0;
+					motor[motorE] = 0;
+				}
 
-						 else if (str == "l"){
-						   motor[motorD] = 0;
-						   motor[motorE] = 50;}
+				else if (str == "s")
+					drive = false;
+			}
 
-						 else if (str == "r"){
-						   motor[motorD] = 50;
-						   motor[motorE] = 0;}
+			else if (!drive)
+			{
+				if (!arm)
+				{
+					if (str == "a")
+						servo[hand_oc] = ServoValue(hand_oc) + 5;
 
-						 else if (str == "t"){
-						   motor[motorD] = 0;
-						   motor[motorE] = 0;}
+					else if (str == "e")
+						servo[hand_oc] = ServoValue(hand_oc) - 5;
 
-						 else if (str == "s"){drive = false;}}
+					else if(str == "c")
+						servo[wrist_lr] = ServoValue(wrist_lr) + 5;
 
-					  else if (!drive){
-					  	if (str == "a"){
-					  		//servoChangeRate[hand_oc] = 1;
-					  		servo[hand_oc] = ServoValue(hand_oc) + 5;}
+					else if (str == "d")
+						servo[wrist_lr] = ServoValue(wrist_lr) - 5;
 
-					  	else if (str == "e"){
-					  		//servoChangeRate[hand_oc] = 1;
-					  		servo[hand_oc] = ServoValue(hand_oc) - 5;}
+					else if (str == "g")
+						servo[wrist_ud] = ServoValue(wrist_ud) + 5;
 
-					  	else if(str == "c"){
-					  		servo[wrist_lr] = ServoValue(wrist_lr) + 5;}
+					else if (str == "h")
+						servo[wrist_ud] = ServoValue(wrist_ud) - 5;
 
-					  	else if (str == "d"){
-					  		servo[wrist_lr] = ServoValue(wrist_lr) - 5;}
+					else if (str == "s")
+						drive = true;
 
-					  	else if (str == "g"){
-					  		servo[wrist_ud] = ServoValue(wrist_ud) + 5;}
+					else if (str == "w")
+						arm = true;
+				}
 
-					  	else if (str == "h"){
-					  		servo[wrist_ud] = ServoValue(wrist_ud) - 5;}
+				else if (arm)
+				{
+					if ((str == "i") && (ServoValue(hand_oc) <= 220))
+						servo[shoulder_lr] = ServoValue(shoulder_lr) + 5;
 
-					  	else if ((str == "i") && (ServoValue(hand_oc) <= 220)){
-					  		servo[shoulder_lr] = ServoValue(shoulder_lr) + 5;}
+					else if ((str == "j") && (ServoValue(hand_oc) >= 20))
+						servo[shoulder_lr] = ServoValue(shoulder_lr) - 5;
 
-					  	else if ((str == "j") && (ServoValue(hand_oc) >= 20)){
-					  		servo[shoulder_lr] = ServoValue(shoulder_lr) - 5;}
+					else if (str == "k")
+					{
+						motor[motorF] = 25;
+						wait1Msec(100);
+						motor[motorF] = 0;
+					}
 
-					  	else if (str == "k")
-					  		{motor[motorF] = 25;
-					  			wait1Msec(100);
-					  			motor[motorF] = 0;}
+					else if (str == "m")
+					{
+						motor[motorF] = -25;
+						wait1Msec(100);
+						motor[motorF] = 0;
+					}
 
-					  	else if (str == "m"){
-					  		motor[motorF] = -25;
-					  		wait1Msec(100);
-					  		motor[motorF] = 0;}
-
-					  	else if (str == "x"){
-					  		motor[motorG] = 30;
-					  		wait1Msec(100);
-					  		motor[motorG] = 0;
-					  		//bFloatDuringInactiveMotorPWM = false;}  // brake
-					  		motor[motorG] = 10;
-					  		wait1Msec(100);
-					  		motor[motorG] = 0;}
+					else if (str == "x")
+					{
+						motor[motorG] = 15;
+						wait1Msec(100);
+						motor[motorG] = 0;
+						motor[motorG] = 10;
+						wait1Msec(100);
+						motor[motorG] = 0;
+					}
 
 
-					  	else if (str == "z"){
-								motor[motorG] = -15;
-					  		wait1Msec(100);
-					  		motor[motorG] = 0;
-					  		//bFloatDuringInactiveMotorPWM = false;}  // brake
-					  		motor[motorG] = 10;
-					  		wait1Msec(100);
-					  		motor[motorG] = 0;}
+					else if (str == "z")
+					{
+						motor[motorG] = -30;
+						wait1Msec(300);
+						motor[motorG] = 0;
+					}
 
-					  	else if (str == "s"){
-					  		drive = true;}}
+					else if (str == "s")
+						drive = true;
+
+					else if (str == "w")
+						arm = false;
+				}
+			}
 						//nSendTotal = 0;
         }
         wait1Msec(1);
     }
-
     return;
 }
