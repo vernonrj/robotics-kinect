@@ -111,14 +111,14 @@ task main()
 	bool drive;
 	bool arm;
 	drive = true;
-	arm = false;
+	arm = true;
 
-	servoChangeRate[hand_oc] = 2;
-	servoChangeRate[wrist_lr] = 2;
-	servoChangeRate[wrist_ud] = 2;
-	servoChangeRate[shoulder_lr] = 2;
+	//servoChangeRate[hand_oc] = 2;
+	//servoChangeRate[wrist_lr] = 2;
+	//servoChangeRate[wrist_ud] = 2;
+	//servoChangeRate[shoulder_lr] = 2;
 	servoTarget[hand_oc] = 200;
-	servoTarget[wrist_lr] = 180;
+	servoTarget[wrist_lr] = 150;
 	servoTarget[wrist_ud] = 80;
 	servoTarget[shoulder_lr] = 127;
 
