@@ -166,7 +166,7 @@
 			<descriptor>0</descriptor>
 		</output>
 	</gesture>
-	<gesture name="swith to arm" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+	<gesture name="swith to arm" timeout="1" enabled="true" outputloop="false" outputtimeout="0">
 		<input type="3">
 			<descriptor>left hand</descriptor>
 			<descriptor>to the left</descriptor>
@@ -181,19 +181,34 @@
 			<descriptor>0</descriptor>
 		</output>
 	</gesture>
+	<gesture name="switch hand or arm" timeout="1" enabled="true" outputloop="false" outputtimeout="0">
+		<input type="3">
+			<descriptor>left wrist</descriptor>
+			<descriptor>to the right</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>200</descriptor>
+			<descriptor>cm/sec</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>press</descriptor>
+			<descriptor>w</descriptor>
+			<descriptor>for</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
 	<gesture name="kill emulation" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
 		<input type="3">
 			<descriptor>left hand</descriptor>
 			<descriptor>to the left</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>400</descriptor>
+			<descriptor>300</descriptor>
 			<descriptor>cm/sec</descriptor>
 		</input>
 		<input type="3">
 			<descriptor>right hand</descriptor>
 			<descriptor>to the right</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>400</descriptor>
+			<descriptor>300</descriptor>
 			<descriptor>cm/sec</descriptor>
 		</input>
 		<output type="6">
@@ -201,12 +216,13 @@
 		</output>
 	</gesture>
 	<gesture name="hand open" timeout="0" enabled="true" outputloop="true" outputtimeout="0">
-		<input type="3">
-			<descriptor>left hand</descriptor>
-			<descriptor>to the right</descriptor>
+		<input type="1">
+			<descriptor>left wrist</descriptor>
+			<descriptor>above</descriptor>
+			<descriptor>left elbow</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>300</descriptor>
-			<descriptor>cm/sec</descriptor>
+			<descriptor>10</descriptor>
+			<descriptor>centimeters</descriptor>
 		</input>
 		<output type="0">
 			<descriptor>press</descriptor>
@@ -216,12 +232,13 @@
 		</output>
 	</gesture>
 	<gesture name="hand close" timeout="0" enabled="true" outputloop="true" outputtimeout="0">
-		<input type="3">
-			<descriptor>left hand</descriptor>
-			<descriptor>to the left</descriptor>
+		<input type="1">
+			<descriptor>left wrist</descriptor>
+			<descriptor>below</descriptor>
+			<descriptor>left elbow</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>300</descriptor>
-			<descriptor>cm/sec</descriptor>
+			<descriptor>10</descriptor>
+			<descriptor>centimeters</descriptor>
 		</input>
 		<output type="0">
 			<descriptor>press</descriptor>
@@ -230,13 +247,45 @@
 			<descriptor>0</descriptor>
 		</output>
 	</gesture>
-	<gesture name="wrist up" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+	<gesture name="wrist up" timeout="0" enabled="true" outputloop="true" outputtimeout="0">
 		<input type="1">
-			<descriptor>right hand</descriptor>
-			<descriptor>above</descriptor>
 			<descriptor>right wrist</descriptor>
+			<descriptor>above</descriptor>
+			<descriptor>right elbow</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>2</descriptor>
+			<descriptor>10</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>press</descriptor>
+			<descriptor>g</descriptor>
+			<descriptor>for</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="wrist down" timeout="0" enabled="true" outputloop="true" outputtimeout="0">
+		<input type="1">
+			<descriptor>right wrist</descriptor>
+			<descriptor>below</descriptor>
+			<descriptor>right elbow</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>10</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>press</descriptor>
+			<descriptor>h</descriptor>
+			<descriptor>for</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="wrist left" timeout="0" enabled="true" outputloop="true" outputtimeout="0">
+		<input type="1">
+			<descriptor>right wrist</descriptor>
+			<descriptor>to the left of</descriptor>
+			<descriptor>right elbow</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>10</descriptor>
 			<descriptor>centimeters</descriptor>
 		</input>
 		<output type="0">
@@ -246,13 +295,13 @@
 			<descriptor>0</descriptor>
 		</output>
 	</gesture>
-	<gesture name="wrist down" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
+	<gesture name="wrist right" timeout="0" enabled="true" outputloop="true" outputtimeout="0">
 		<input type="1">
-			<descriptor>right hand</descriptor>
-			<descriptor>below</descriptor>
 			<descriptor>right wrist</descriptor>
+			<descriptor>to the right of</descriptor>
+			<descriptor>right elbow</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>2</descriptor>
+			<descriptor>10</descriptor>
 			<descriptor>centimeters</descriptor>
 		</input>
 		<output type="0">
@@ -264,11 +313,11 @@
 	</gesture>
 	<gesture name="shoulder left" timeout="0" enabled="true" outputloop="true" outputtimeout="0">
 		<input type="1">
-			<descriptor>right elbow</descriptor>
+			<descriptor>right wrist</descriptor>
 			<descriptor>to the left of</descriptor>
-			<descriptor>right shoulder</descriptor>
+			<descriptor>right elbow</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>5</descriptor>
+			<descriptor>10</descriptor>
 			<descriptor>centimeters</descriptor>
 		</input>
 		<output type="0">
@@ -280,11 +329,11 @@
 	</gesture>
 	<gesture name="shoulder right" timeout="0" enabled="true" outputloop="true" outputtimeout="0">
 		<input type="1">
-			<descriptor>right elbow</descriptor>
+			<descriptor>right wrist</descriptor>
 			<descriptor>to the right of</descriptor>
-			<descriptor>right shoulder</descriptor>
+			<descriptor>right elbow</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>5</descriptor>
+			<descriptor>10</descriptor>
 			<descriptor>centimeters</descriptor>
 		</input>
 		<output type="0">
@@ -296,11 +345,11 @@
 	</gesture>
 	<gesture name="shoulder up" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
 		<input type="1">
-			<descriptor>right elbow</descriptor>
+			<descriptor>right wrist</descriptor>
 			<descriptor>above</descriptor>
-			<descriptor>right shoulder</descriptor>
+			<descriptor>right elbow</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>5</descriptor>
+			<descriptor>10</descriptor>
 			<descriptor>centimeters</descriptor>
 		</input>
 		<output type="0">
@@ -312,11 +361,11 @@
 	</gesture>
 	<gesture name="shoulder down" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
 		<input type="1">
-			<descriptor>right elbow</descriptor>
+			<descriptor>right wrist</descriptor>
 			<descriptor>below</descriptor>
-			<descriptor>right shoulder</descriptor>
+			<descriptor>right elbow</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>5</descriptor>
+			<descriptor>10</descriptor>
 			<descriptor>centimeters</descriptor>
 		</input>
 		<output type="0">
@@ -328,11 +377,11 @@
 	</gesture>
 	<gesture name="elbow up" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
 		<input type="1">
-			<descriptor>right wrist</descriptor>
+			<descriptor>left wrist</descriptor>
 			<descriptor>above</descriptor>
-			<descriptor>right elbow</descriptor>
+			<descriptor>left elbow</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>5</descriptor>
+			<descriptor>10</descriptor>
 			<descriptor>centimeters</descriptor>
 		</input>
 		<output type="0">
@@ -344,11 +393,11 @@
 	</gesture>
 	<gesture name="elbow down" timeout="0" enabled="true" outputloop="false" outputtimeout="0">
 		<input type="1">
-			<descriptor>right wrist</descriptor>
+			<descriptor>left wrist</descriptor>
 			<descriptor>below</descriptor>
-			<descriptor>right elbow</descriptor>
+			<descriptor>left elbow</descriptor>
 			<descriptor>at least</descriptor>
-			<descriptor>5</descriptor>
+			<descriptor>10</descriptor>
 			<descriptor>centimeters</descriptor>
 		</input>
 		<output type="0">
